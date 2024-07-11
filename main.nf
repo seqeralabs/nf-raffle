@@ -15,7 +15,7 @@ process PRINT_PRIVACY_MESSAGE {
 
 process PRINT_ISMB_BOSC_LOGO {
     input:
-    val bosc_logo
+    file bosc_logo
 
     output:
     stdout
