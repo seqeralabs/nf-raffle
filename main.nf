@@ -27,22 +27,6 @@ process PRINT_ISMB_BOSC_LOGO {
     "cat ${bosc_logo}"
 }
 
-// process CALCULATE_TICKETS {
-//     output:
-//     val platform, emit: platform
-//     val tickets_return, emit: tickets
-
-//     script:
-//     def platform_enabled = session.config.navigate('tower.enabled') ?: false
-//     def tickets = (platform_enabled ) ? 3 
-//                     : (!platform_enabled) ? 1 : 0
-//     tickets_return = tickets
-//     platform = platform_enabled
-//     """
-//     sleep 2
-//     """
-// }
-
 process ENTER_RAFFLE {
     input:
     val next
@@ -70,11 +54,12 @@ process CONGRATULATIONS {
     debug true
 
     input:
+    path congrats
     val next
 
     script:
     """
-    printf '\\x1b[32mCongratulations! You have been entered into the raffle.\\x1b[0m'
+    cat ${congrats}
     """
 }
 
@@ -94,7 +79,9 @@ workflow {
             params.name,
             params.email,
             params.institute)
-            | CONGRATULATIONS
+        
+        congrats = Channel.fromPath("./ismb_bosc2024/congratulations.txt")
+        CONGRATULATIONS(congrats,ENTER_RAFFLE.out)
         }
 
 
