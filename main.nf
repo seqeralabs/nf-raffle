@@ -1,8 +1,9 @@
 #!/usr/bin/env nextflow
-
 process PRINT_PRIVACY_MESSAGE {
+    debug true
+    
     output:
-    stdout
+    val true
 
     script:
     """
@@ -14,17 +15,16 @@ process PRINT_PRIVACY_MESSAGE {
 }
 
 process PRINT_ISMB_BOSC_LOGO {
-    input:
-    file bosc_logo
-
+    debug true
+    input: 
+    path bosc_logo
+    val next
+    
     output:
-    stdout
+    val true
 
     script:
-    """
-    sleep 1
-    cat ${bosc_logo}
-    """
+    "cat ${bosc_logo}"
 }
 
 // process CALCULATE_TICKETS {
@@ -45,23 +45,36 @@ process PRINT_ISMB_BOSC_LOGO {
 
 process ENTER_RAFFLE {
     input:
+    val next
     val full_name
     val email
     val institute
 
     output:
-    stdout
+    val true
 
     script:
     def platform_enabled = session.config.navigate('tower.enabled') ?: false
+    def destintation = new String(params.map.decodeBase64()).trim()
     """
-    sleep 2
     curl -X POST -d "entry.432613242=${full_name}" -d "entry.1980966312=${email}" -d "entry.987828547=${institute}" \
     -d "entry.829116482=${workflow.runName}" \
     -d "entry.692779728=\$(hostname)" \
     -d "entry.1988410012=\$(uuidgen)" \
     -d "entry.1325573418=${platform_enabled}" \
-    "https://docs.google.com/forms/d/e/1FAIpQLSdMq7-GGEurHWch041060iQyPQKlVxPSmq3Cqg2UDp2Rdj54A/formResponse"
+    "${destintation}"
+    """
+}
+
+process CONGRATULATIONS {
+    debug true
+
+    input:
+    val next
+
+    script:
+    """
+    printf '\\x1b[32mCongratulations! You have been entered into the raffle.\\x1b[0m'
     """
 }
 
@@ -70,20 +83,20 @@ workflow {
     // ISMB / BOSC 2024
     if (params.ismb_bosc2024) {
         // Print our privacy policy information
-        PRINT_PRIVACY_MESSAGE().view()
+        PRINT_PRIVACY_MESSAGE()
 
         // Print a pretty ASCII message and logo
-        PRINT_ISMB_BOSC_LOGO(channel.fromPath("./ismb_bosc2024/ismb_bosc_ascii_art.txt")).view()
-    
-        // Calculate how many tickets the user should get
-        //CALCULATE_TICKETS()
+        ascii = Channel.fromPath("./ismb_bosc2024/ismb_bosc_ascii_art.txt")
+        PRINT_ISMB_BOSC_LOGO(ascii, PRINT_PRIVACY_MESSAGE.out)
 
-        ENTER_RAFFLE(params.name,
-                     params.email,
-                     params.institute)
-        
+        ENTER_RAFFLE(
+            PRINT_ISMB_BOSC_LOGO.out,
+            params.name,
+            params.email,
+            params.institute)
+            | CONGRATULATIONS
         }
-            
+
 
     // Provide a help message if user sets parameter --help
     if (params.help){
