@@ -71,7 +71,7 @@ workflow {
         PRINT_PRIVACY_MESSAGE()
 
         // Print a pretty ASCII message and logo
-        ascii = Channel.fromPath("${basedir}/ismb_bosc2024/ismb_bosc_ascii_art.txt")
+        ascii = Channel.fromPath("${baseDir}/ismb_bosc2024/ismb_bosc_ascii_art.txt")
         PRINT_ISMB_BOSC_LOGO(ascii, PRINT_PRIVACY_MESSAGE.out)
 
         ENTER_RAFFLE(
