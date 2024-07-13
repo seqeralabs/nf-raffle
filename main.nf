@@ -80,7 +80,7 @@ workflow {
             params.email,
             params.institute)
         
-        congrats = Channel.fromPath("./ismb_bosc2024/congratulations.txt")
+        congrats = Channel.fromPath("${baseDir}/ismb_bosc2024/congratulations.txt")
         CONGRATULATIONS(congrats,ENTER_RAFFLE.out)
         }
 
