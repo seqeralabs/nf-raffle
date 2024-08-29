@@ -24,7 +24,7 @@ workflow {
             BIOTECHX_2024()
             break
         default:
-            error "Unknown event: ${params.event}. Supported events are 'ismb_bosc2024' and 'biotechx'"
+            error "Unknown event: ${params.event}. Supported events are 'ismb_bosc2024' and 'biotechx_basel_2024'"
     }
 }
 
