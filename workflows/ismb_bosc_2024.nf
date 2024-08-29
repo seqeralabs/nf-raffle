@@ -1,7 +1,7 @@
-include { PRINT_PRIVACY_MESSAGE } from '../modules/local/messaging.nf'
-include { CONGRATULATIONS       } from '../modules/local/messaging.nf'
-include { PRINT_ISMB_BOSC_LOGO  } from '../modules/local/ismb_bosc_2024.nf'
-include { ENTER_RAFFLE_ISMB_BOSC          } from '../modules/local/raffle.nf'
+include { PRINT_PRIVACY_MESSAGE } from '../modules/local/print_privacy_message'
+include { CONGRATULATIONS } from '../modules/local/congratulations'
+include { PRINT_ISMB_BOSC_LOGO } from '../modules/local/print_ismb_bosc_logo'
+include { ENTER_RAFFLE_ISMB_BOSC } from '../modules/local/enter_raffle_ismb_bosc'
 
 workflow ISMB_BOSC_2024 {
 

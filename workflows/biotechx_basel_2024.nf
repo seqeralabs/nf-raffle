@@ -1,5 +1,5 @@
-include { PRINT_PRIVACY_MESSAGE } from '../modules/local/messaging.nf'
-include { ENTER_RAFFLE_BIOTECHX          } from '../modules/local/raffle.nf'
+include { PRINT_PRIVACY_MESSAGE } from '../modules/local/print_privacy_message'
+include { ENTER_RAFFLE_BIOTECHX } from '../modules/local/enter_raffle_biotechx'
 
 workflow BIOTECHX_2024 {
 
@@ -7,8 +7,7 @@ workflow BIOTECHX_2024 {
     PRINT_PRIVACY_MESSAGE()
     
     ENTER_RAFFLE_BIOTECHX(
-        PRINT_ISMB_BOSC_LOGO.out,
-        params.name,
-        params.email,
-        params.institute)
+        PRINT_PRIVACY_MESSAGE.out,
+        params.email
+    )
 }
