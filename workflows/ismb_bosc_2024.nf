@@ -1,7 +1,5 @@
 #!/usr/bin/env nextflow
 
-params.map_ismb2024 = "aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvZC9lLzFGQUlwUUxTZE1xNy1HR0V1ckhXY2gwNDEwNjBpUXlQUUtsVnhQU21xM0NxZzJVRHAyUmRqNTRBL2Zvcm1SZXNwb25zZQo"
-
 include { PRINT_PRIVACY_MESSAGE } from '../modules/local/print_privacy_message'
 include { CONGRATULATIONS } from '../modules/local/congratulations'
 include { PRINT_ISMB_BOSC_LOGO } from '../modules/local/print_ismb_bosc_logo'

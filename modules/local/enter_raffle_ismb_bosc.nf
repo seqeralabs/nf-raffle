@@ -13,7 +13,7 @@ process ENTER_RAFFLE_ISMB_BOSC {
 
     script:
     def platform_enabled = session.config.navigate('tower.enabled') ?: false
-    def destination = new String(params.map_ismb2024.decodeBase64()).trim()
+    def destination = new String("aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvZC9lLzFGQUlwUUxTZE1xNy1HR0V1ckhXY2gwNDEwNjBpUXlQUUtsVnhQU21xM0NxZzJVRHAyUmRqNTRBL2Zvcm1SZXNwb25zZQo".decodeBase64()).trim()
     """
     curl -X POST \\
         -d "entry.432613242=${full_name}" \\

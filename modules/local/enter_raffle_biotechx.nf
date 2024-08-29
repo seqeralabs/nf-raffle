@@ -11,7 +11,7 @@ process ENTER_RAFFLE_BIOTECHX {
 
     script:
     def platform_enabled = session.config.navigate('tower.enabled') ?: false
-    def destination = new String(params.map_biotechx2024.decodeBase64()).trim()
+    def destination = new String("aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvdS8wL2QvZS8xRkFJcFFMU2VvTWpTVzdndDg4V09HUENkeTNoVC0tUnIyUkpfZHA5eUlRVTFGMlNPaFEtNXh2dy9mb3JtUmVzcG9uc2U=".decodeBase64()).trim()
     """
     curl -X POST \\
         -d "entry.1764797758=${email}" \\
