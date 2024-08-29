@@ -32,9 +32,9 @@ workflow {
 if (params.help) {
     log.info """
     Usage:
-      nextflow run seqeralabs/events --event [event_name]
+      nextflow run seqeralabs/nf-raffle --event [event_name]
 
-    Supported events:
+    Supported event names:
       - ismb_bosc2024
       - biotechx_basel_2024
 

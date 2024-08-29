@@ -1,3 +1,7 @@
+#!/usr/bin/env nextflow
+
+params.map_ismb2024 = "aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvZC9lLzFGQUlwUUxTZE1xNy1HR0V1ckhXY2gwNDEwNjBpUXlQUUtsVnhQU21xM0NxZzJVRHAyUmRqNTRBL2Zvcm1SZXNwb25zZQo"
+
 include { PRINT_PRIVACY_MESSAGE } from '../modules/local/print_privacy_message'
 include { CONGRATULATIONS } from '../modules/local/congratulations'
 include { PRINT_ISMB_BOSC_LOGO } from '../modules/local/print_ismb_bosc_logo'
@@ -21,18 +25,4 @@ workflow ISMB_BOSC_2024 {
     congrats = Channel.fromPath("${baseDir}/ismb_bosc2024/congratulations.txt")
     CONGRATULATIONS(congrats,ENTER_RAFFLE_ISMB_BOSC.out)
     
-
-    // Provide a help message if user sets parameter --help
-    if (params.help){
-        println "To enter the raffle, please run the pipeline with the following parameters set:"
-        println " "
-        println "  nextflow run seqeralabs/events --ismb_bosc2024 --name [your_name] --email [your_email] --institute [your_institute]"
-        println " "
-        println "--------------------------------------------------------------------------------------"
-        println "If you run into any issues or have any questions concerning this pipeline or Nextflow"
-        println "   please find us at Table 15 at ISMB / BOSC 2024 in Montreal."
-        println "--------------------------------------------------------------------------------------"
-        System.exit(0)
-    }
-
 }

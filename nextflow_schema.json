@@ -48,17 +48,8 @@
     "event": {
       "type": "string",
       "default": "biotechx_basel_2024",
-      "fa_icon": "far fa-calendar-alt"
-    },
-    "map_ismb2024": {
-      "type": "string",
-      "default": "aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvZC9lLzFGQUlwUUxTZE1xNy1HR0V1ckhXY2gwNDEwNjBpUXlQUUtsVnhQU21xM0NxZzJVRHAyUmRqNTRBL2Zvcm1SZXNwb25zZQo",
-      "fa_icon": "fas fa-unlink"
-    },
-    "map_biotechx2024": {
-      "type": "string",
-      "default": "aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvdS8wL2QvZS8xRkFJcFFMU2VvTWpTVzdndDg4V09HUENkeTNoVC0tUnIyUkpfZHA5eUlRVTFGMlNPaFEtNXh2dy9mb3JtUmVzcG9uc2U=",
-      "fa_icon": "fas fa-unlink"
+      "fa_icon": "far fa-calendar-alt",
+      "description": "Which event are you participating in?"
     }
   }
 }
