@@ -4,7 +4,7 @@ include { PRINT_PRIVACY_MESSAGE } from '../modules/local/print_privacy_message'
 include { ENTER_RAFFLE_BIOTECHX } from '../modules/local/enter_raffle_biotechx'
 
 process PUBLISH_REPORT {
-    publishDir "${params.outdir}/report", mode: 'copy'
+    publishDir "${params.outdir}", mode: 'copy'
 
     input:
     path html_report
