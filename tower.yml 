@@ -1,5 +1,5 @@
 reports:
-  "raffle_ticket.html":
-    display: Your raffle ticket!
+  raffle_ticket.html:
+    display: "Your raffle ticket!"
   "report.html":
     display: "Nextflow execution report"
