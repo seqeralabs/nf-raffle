@@ -29,6 +29,6 @@ workflow BIOTECHX_2024 {
     )
 
     // Publish the HTML report
-    html_report = file("$projectDir/index_embedded.html")
+    html_report = file("$projectDir/raffle_ticket.html")
     PUBLISH_REPORT(html_report)
 }
