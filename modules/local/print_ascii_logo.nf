@@ -1,9 +1,9 @@
-process PRINT_ISMB_BOSC_LOGO {
-    tag "$bosc_logo"
+process PRINT_ASCII_LOGO {
+    tag "$logo"
     label 'process_single'
 
     input:
-    path bosc_logo
+    path logo
     val next
 
     output:
@@ -11,6 +11,6 @@ process PRINT_ISMB_BOSC_LOGO {
 
     script:
     """
-    cat ${bosc_logo}
+    cat ${logo}
     """
 }
