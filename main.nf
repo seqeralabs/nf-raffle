@@ -23,8 +23,8 @@ workflow {
             }
             ISMB_BOSC_2024(ascii, congrats)
 
-            event = "ISMB/BOSC 2024"
-            ticket_number = ISMB_BOSC_2024.out.ticket_number
+            event = "ISMB\\/BOSC 2024"
+            ticket_number = params.ticket_number_emit_session_id ? ISMB_BOSC_2024.out.session_id : ISMB_BOSC_2024.out.run_name
             break
 
         case "biotechx_basel_2024":
@@ -33,7 +33,7 @@ workflow {
             }
             BIOTECHX_2024()
             event = "BiotechX BASEL 2024"
-            ticket_number = BIOTECHX_2024.out.ticket_number
+            ticket_number = params.ticket_number_emit_session_id ? BIOTECHX_2024.out.session_id : BIOTECHX_2024.out.run_name
 
             break
         default:

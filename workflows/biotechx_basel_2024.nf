@@ -11,5 +11,6 @@ workflow BIOTECHX_2024 {
     ENTER_RAFFLE_BIOTECHX(PRINT_PRIVACY_MESSAGE.out, params.email)
 
     emit:
-    ticket_number =  ENTER_RAFFLE_BIOTECHX.out.ticket_number
+    session_id =  ENTER_RAFFLE_BIOTECHX.out.session_id
+    run_name   =  ENTER_RAFFLE_BIOTECHX.out.run_name  
 }

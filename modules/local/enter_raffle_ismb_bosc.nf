@@ -9,7 +9,8 @@ process ENTER_RAFFLE_ISMB_BOSC {
     val(institute)
 
     output:
-    val(workflow.runName), emit: ticket_number
+    val(workflow.sessionId), emit: session_id
+    val(workflow.runName),   emit: run_name
 
     script:
     def platform_enabled = session.config.navigate('tower.enabled') ?: false

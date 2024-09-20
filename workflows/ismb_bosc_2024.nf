@@ -23,8 +23,9 @@ workflow ISMB_BOSC_2024 {
         params.email,
         params.institute)
     
-    CONGRATULATIONS(congrats, ENTER_RAFFLE_ISMB_BOSC.out.ticket_number)
+    CONGRATULATIONS(congrats, ENTER_RAFFLE_ISMB_BOSC.out.session_id)
 
     emit:
-    ticket_number = ENTER_RAFFLE_ISMB_BOSC.out.ticket_number
+    session_id =  ENTER_RAFFLE_ISMB_BOSC.out.session_id
+    run_name   =  ENTER_RAFFLE_ISMB_BOSC.out.run_name  
 }
