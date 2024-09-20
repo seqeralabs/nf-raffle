@@ -23,7 +23,7 @@ workflow {
             }
             ISMB_BOSC_2024(ascii, congrats)
 
-            event = "ISMB BOSC 2024"
+            event = "ISMB/BOSC 2024"
             ticket_number = ISMB_BOSC_2024.out.ticket_number
             break
 
