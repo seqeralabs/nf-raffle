@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
-include { PRINT_PRIVACY_MESSAGE } from '../modules/local/print_privacy_message'
 include { ENTER_RAFFLE_BIOTECHX } from '../modules/local/enter_raffle_biotechx'
+include { PRINT_PRIVACY_MESSAGE } from '../modules/local/print_privacy_message'
 
 process PUBLISH_REPORT {
     publishDir "${params.outdir}", mode: 'copy'
