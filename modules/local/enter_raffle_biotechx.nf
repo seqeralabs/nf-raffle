@@ -7,7 +7,7 @@ process ENTER_RAFFLE_BIOTECHX {
     val(email)
 
     output:
-    val(true)
+    val(workflow.runName), emit: ticket_number
 
     script:
     def platform_enabled = session.config.navigate('tower.enabled') ?: false
