@@ -49,7 +49,17 @@
       "type": "string",
       "default": "biotechx_basel_2024",
       "fa_icon": "far fa-calendar-alt",
-      "description": "Which event are you participating in?"
+      "description": "Which event are you participating in?",
+      "hidden": true
+    },
+    "outdir": {
+      "type": "string",
+      "default": "results",
+      "hidden": true
+    },
+    "ticket_number_emit_session_id": {
+      "type": "boolean",
+      "hidden": true
     }
   }
 }
