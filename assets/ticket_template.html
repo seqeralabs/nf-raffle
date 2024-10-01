@@ -136,7 +136,33 @@
             this.querySelector('.card__inner').classList.toggle('is-flipped');
         }
 
-        cards.forEach((card) => card.addEventListener('click', flipCard));
+        // Separate mouse and touch event handlers
+        function handleMouseEvents() {
+            cards.forEach((card) => {
+                card.addEventListener('click', flipCard);
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                cards.forEach(card => applyHolographicEffect(e, card));
+            });
+
+            container.addEventListener('mouseleave', resetCardTransform);
+        }
+
+        function handleTouchEvents() {
+            cards.forEach((card) => {
+                card.addEventListener('touchend', function(e) {
+                    if (e.changedTouches.length === 1) {
+                        e.preventDefault();
+                        flipCard.call(this);
+                    }
+                });
+            });
+
+            container.addEventListener('touchmove', handleTouchMove, { passive: false });
+            container.addEventListener('touchend', resetCardTransform);
+            container.addEventListener('touchcancel', resetCardTransform);
+        }
 
         function applyHolographicEffect(e, card) {
             const rect = card.getBoundingClientRect();
@@ -164,11 +190,37 @@
             `;
         }
 
-        container.addEventListener('mousemove', (e) => {
-            cards.forEach(card => applyHolographicEffect(e, card));
-        });
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
 
-        container.addEventListener('mouseleave', () => {
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const deltaX = (x - centerX) / centerX;
+                const deltaY = (y - centerY) / centerY;
+
+                const cardFaces = card.querySelectorAll('.card__face');
+                cardFaces.forEach(face => {
+                    face.style.setProperty('--x', `${50 + deltaX * 20}%`);
+                    face.style.setProperty('--y', `${50 + deltaY * 20}%`);
+                    face.style.backgroundPosition = `var(--x) var(--y)`;
+                });
+
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateY(${deltaX * 10}deg)
+                    rotateX(${-deltaY * 10}deg)
+                    translateZ(10px)
+                `;
+            });
+        }
+
+        function resetCardTransform() {
             cards.forEach(card => {
                 card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0)';
                 const cardFaces = card.querySelectorAll('.card__face');
@@ -176,7 +228,14 @@
                     face.style.backgroundPosition = '50% 50%';
                 });
             });
-        });
+        }
+
+        // Detect touch capability
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            handleTouchEvents();
+        } else {
+            handleMouseEvents();
+        }
 
         // Add this function to resize the card
         function resizeCard() {
