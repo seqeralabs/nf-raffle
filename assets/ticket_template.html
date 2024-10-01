@@ -86,7 +86,13 @@
             font-size: xx-large;
             text-align: start;
             margin-left: 30%;
-            margin-top: 17%
+            margin-top: 17%;
+            /* Remove the fixed font-size */
+        }
+
+        /* Add a new class for mobile text size */
+        .mobile .ticket_text {
+            font-size: large; /* Adjust this value as needed */
         }
 
         .card__face--front::before,
@@ -136,7 +142,7 @@
             this.querySelector('.card__inner').classList.toggle('is-flipped');
         }
 
-        // Separate mouse and touch event handlers
+        // Desktop mouse event handlers
         function handleMouseEvents() {
             cards.forEach((card) => {
                 card.addEventListener('click', flipCard);
@@ -149,6 +155,7 @@
             container.addEventListener('mouseleave', resetCardTransform);
         }
 
+        // Mobile touch event handlers
         function handleTouchEvents() {
             cards.forEach((card) => {
                 card.addEventListener('touchend', function(e) {
@@ -190,6 +197,7 @@
             `;
         }
 
+        // Handle touch move for holographic effect on mobile
         function handleTouchMove(e) {
             e.preventDefault();
             const touch = e.touches[0];
@@ -230,14 +238,33 @@
             });
         }
 
-        // Detect touch capability
+        // Function to check if the device is mobile
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Function to adjust text size
+        function adjustTextSize() {
+            const body = document.body;
+            if (isMobile()) {
+                body.classList.add('mobile');
+            } else {
+                body.classList.remove('mobile');
+            }
+        }
+
+        // Detect touch capability and apply appropriate event handlers
         if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            // Device has touch capability, use touch events
             handleTouchEvents();
+            // Add 'mobile' class to body
+            document.body.classList.add('mobile');
         } else {
+            // Device doesn't have touch capability, use mouse events
             handleMouseEvents();
         }
 
-        // Add this function to resize the card
+        // Resize card function (works for both desktop and mobile)
         function resizeCard() {
             const card = document.querySelector('.card');
             const container = document.querySelector('.container');
@@ -254,9 +281,12 @@
             
             card.style.width = `${newWidth}px`;
             card.style.height = `${newHeight}px`;
+
+            // Call adjustTextSize after resizing
+            adjustTextSize();
         }
 
-        // Call resizeCard on load and window resize
+        // Call resizeCard on load and window resize (works for both desktop and mobile)
         window.addEventListener('load', resizeCard);
         window.addEventListener('resize', resizeCard);
     </script>
