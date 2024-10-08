@@ -86,7 +86,13 @@
             font-size: xx-large;
             text-align: start;
             margin-left: 30%;
-            margin-top: 17%
+            margin-top: 17%;
+            /* Remove the fixed font-size */
+        }
+
+        /* Add a new class for mobile text size */
+        .mobile .ticket_text {
+            font-size: large; /* Adjust this value as needed */
         }
 
         .card__face--front::before,
@@ -98,8 +104,7 @@
             width: 100%;
             height: 100%;
             background: 
-                linear-gradient(125deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.3) 100%),
-                url("https://assets.codepen.io/13471/sparkles.gif");
+                linear-gradient(125deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.3) 100%);
             background-size: 200% 200%, cover;
             background-position: 50% 50%;
             mix-blend-mode: color-dodge;
@@ -136,7 +141,34 @@
             this.querySelector('.card__inner').classList.toggle('is-flipped');
         }
 
-        cards.forEach((card) => card.addEventListener('click', flipCard));
+        // Desktop mouse event handlers
+        function handleMouseEvents() {
+            cards.forEach((card) => {
+                card.addEventListener('click', flipCard);
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                cards.forEach(card => applyHolographicEffect(e, card));
+            });
+
+            container.addEventListener('mouseleave', resetCardTransform);
+        }
+
+        // Mobile touch event handlers
+        function handleTouchEvents() {
+            cards.forEach((card) => {
+                card.addEventListener('touchend', function(e) {
+                    if (e.changedTouches.length === 1) {
+                        e.preventDefault();
+                        flipCard.call(this);
+                    }
+                });
+            });
+
+            container.addEventListener('touchmove', handleTouchMove, { passive: false });
+            container.addEventListener('touchend', resetCardTransform);
+            container.addEventListener('touchcancel', resetCardTransform);
+        }
 
         function applyHolographicEffect(e, card) {
             const rect = card.getBoundingClientRect();
@@ -164,11 +196,38 @@
             `;
         }
 
-        container.addEventListener('mousemove', (e) => {
-            cards.forEach(card => applyHolographicEffect(e, card));
-        });
+        // Handle touch move for holographic effect on mobile
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
 
-        container.addEventListener('mouseleave', () => {
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const deltaX = (x - centerX) / centerX;
+                const deltaY = (y - centerY) / centerY;
+
+                const cardFaces = card.querySelectorAll('.card__face');
+                cardFaces.forEach(face => {
+                    face.style.setProperty('--x', `${50 + deltaX * 20}%`);
+                    face.style.setProperty('--y', `${50 + deltaY * 20}%`);
+                    face.style.backgroundPosition = `var(--x) var(--y)`;
+                });
+
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateY(${deltaX * 10}deg)
+                    rotateX(${-deltaY * 10}deg)
+                    translateZ(10px)
+                `;
+            });
+        }
+
+        function resetCardTransform() {
             cards.forEach(card => {
                 card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0)';
                 const cardFaces = card.querySelectorAll('.card__face');
@@ -176,9 +235,35 @@
                     face.style.backgroundPosition = '50% 50%';
                 });
             });
-        });
+        }
 
-        // Add this function to resize the card
+        // Function to check if the device is mobile
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Function to adjust text size
+        function adjustTextSize() {
+            const body = document.body;
+            if (isMobile()) {
+                body.classList.add('mobile');
+            } else {
+                body.classList.remove('mobile');
+            }
+        }
+
+        // Detect touch capability and apply appropriate event handlers
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            // Device has touch capability, use touch events
+            handleTouchEvents();
+            // Add 'mobile' class to body
+            document.body.classList.add('mobile');
+        } else {
+            // Device doesn't have touch capability, use mouse events
+            handleMouseEvents();
+        }
+
+        // Resize card function (works for both desktop and mobile)
         function resizeCard() {
             const card = document.querySelector('.card');
             const container = document.querySelector('.container');
@@ -195,9 +280,12 @@
             
             card.style.width = `${newWidth}px`;
             card.style.height = `${newHeight}px`;
+
+            // Call adjustTextSize after resizing
+            adjustTextSize();
         }
 
-        // Call resizeCard on load and window resize
+        // Call resizeCard on load and window resize (works for both desktop and mobile)
         window.addEventListener('load', resizeCard);
         window.addEventListener('resize', resizeCard);
     </script>
