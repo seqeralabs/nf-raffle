@@ -17,7 +17,6 @@ process ENTER_RAFFLE_BIOTECHX {
     curl -X POST \\
         -d "entry.1764797758=${email}" \\
         -d "entry.957741798=${workflow.runName}" \\
-        -d "entry.1283336320=\$(uuidgen)" \\
         -d "entry.524404923=${platform_enabled}" \\
         "${destination}"
     """
