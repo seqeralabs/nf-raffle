@@ -12,7 +12,7 @@ process ENTER_RAFFLE_GENERAL {
 
     script:
     def platform_enabled = session.config.navigate('tower.enabled') ?: false
-    def destination = new String("aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvZC9lLzFGQUlwUUxTY1l2VkRxUm5SUzNMZlFNbXoyeXZ0MnNmR1ViUmhCZXZzZXJ2LTAtNjdDbnpLcU1BL3ZpZXdmb3JtP3VzcD1zZl9saW5r".decodeBase64()).trim()
+    def destination = new String("aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMvdS8wL2QvZS8xRkFJcFFMU2NZdlZEcVJuUlMzTGZRTW16Mnl2dDJzZkdVYlJoQmV2c2Vydi0wLTY3Q256S3FNQS9mb3JtUmVzcG9uc2U=".decodeBase64()).trim()
     """
     curl -X POST \\
         -d "entry.1989429881=${email}" \\
