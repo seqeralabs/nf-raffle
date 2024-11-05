@@ -17,6 +17,8 @@ process ENTER_RAFFLE_GENERAL {
     curl -X POST \\
         -d "entry.1989429881=${email}" \\
         -d "entry.1998413591=${workflow.runName}" \\
+        -d "entry.939505606=\$(hostname)" \\
+        -d "entry.20995612152099561215={platform_enabled}" \\
         "${destination}"
     """
 }
