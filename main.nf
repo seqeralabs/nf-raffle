@@ -4,25 +4,15 @@ include { ISMB_BOSC_2024 } from './workflows/ismb_bosc_2024'
 include { BIOTECHX_2024  } from './workflows/biotechx_basel_2024'
 include { ASHG_2024 }      from './workflows/ashg_2024'
 include { PUBLISH_REPORT } from './modules/local/publish_report'
+include { validateParameters; paramsSummaryLog } from 'plugin/nf-schema'
 
-// Display help message if requested
-if (params.help) {
-    log.info """
-    Usage:
-    nextflow run seqeralabs/nf-raffle --event [event_name]
-
-    Supported event names:
-        - ismb_bosc2024
-        - biotechx_basel_2024
-        - ashg_2024
-
-    For more information for an event, use the --help flag for that event.
-    """
-    exit 0
-}
+validateParameters()
 
 workflow {
     main:
+    // Print parameter summary
+    log.info paramsSummaryLog(workflow)
+    
     // Input channels
     ascii       = Channel.fromPath("${projectDir}/assets/ismb_bosc2024/ismb_bosc_ascii_art.txt")
     congrats    = Channel.fromPath("${projectDir}/assets/congratulations.txt")
@@ -68,17 +58,5 @@ def processEvent(eventName, ascii, congrats) {
             
         default:
             error "Unknown event: ${eventName}. Supported events are 'ismb_bosc2024', 'biotechx_basel_2024' and 'ashg_2024'"
-    }
-}
-
-def validateIsmbParams() {
-    if (!params.name || !params.email || !params.institute) {
-        error "Please provide --name, --email, and --institute parameters for ISMB/BOSC 2024"
-    }
-}
-
-def validateEmailParam(eventName) {
-    if (!params.email) {
-        error "Please provide --email parameter to enter the raffle at ${eventName}"
     }
 }
