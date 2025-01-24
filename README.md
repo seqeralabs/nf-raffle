@@ -13,6 +13,7 @@ Currently, the pipeline supports the following events:
 - ISMB/BOSC 2024      [--event ismb_bosc2024]
 - BiotechX Basel 2024 [--event biotechx_basel_2024]
 - ASHG 2024           [--event ashg_2024]
+- SLAS 2025           [--event slas_2025]
 
 ## How to Run
 
