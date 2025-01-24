@@ -19,7 +19,9 @@
           "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
         }
       },
-      "required": ["email"]
+      "required": [
+        "email"
+      ]
     },
     "generic_options": {
       "title": "Generic options",
@@ -48,7 +50,7 @@
   "properties": {
     "event": {
       "type": "string",
-      "default": "biotechx_basel_2024",
+      "default": "fog",
       "fa_icon": "far fa-calendar-alt",
       "description": "Which event are you participating in?",
       "hidden": true
