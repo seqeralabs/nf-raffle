@@ -47,7 +47,7 @@ workflow {
             event = "ASHG 2024"
             ticket_number = params.ticket_number_emit_session_id ? ASHG_2024.out.session_id : ASHG_2024.out.run_name
             break
-        case "fog":
+        case "fog_2025":
             if (!params.email) {
                 error "Please provide --email parameter to enter the raffle at FOG 2025."
             }
