@@ -47,7 +47,7 @@ workflow {
             event = "ASHG 2024"
             ticket_number = params.ticket_number_emit_session_id ? ASHG_2024.out.session_id : ASHG_2024.out.run_name
             break
-        case "fog":
+        case "fog_2025":
             if (!params.email) {
                 error "Please provide --email parameter to enter the raffle at FOG 2025."
             }
@@ -64,7 +64,7 @@ workflow {
             ticket_number = params.ticket_number_emit_session_id ? SLAS_2025.out.session_id : SLAS_2025.out.run_name
             break
         default:
-            error "Unknown event: ${params.event}. Supported events are 'fog', 'ismb_bosc2024', 'biotechx_basel_2024', 'ashg_2024', and 'slas_2025'"
+            error "Unknown event: ${params.event}. Supported events are 'fog_2025', 'slas_2025', 'ismb_bosc2024', 'biotechx_basel_2024' and 'ashg_2024'"
     }
 
     PUBLISH_REPORT(html_report, event, ticket_number)

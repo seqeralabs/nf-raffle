@@ -14,6 +14,7 @@ Currently, the pipeline supports the following events:
 - BiotechX Basel 2024 [--event biotechx_basel_2024]
 - ASHG 2024           [--event ashg_2024]
 - SLAS 2025           [--event slas_2025]
+- FOG 2025            [--event fog_2025]
 
 ## How to Run
 

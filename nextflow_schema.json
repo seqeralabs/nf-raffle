@@ -1,80 +1,57 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/nextflow_schema.json",
-  "title": "nf-raffle pipeline parameters",
-  "description": "This pipeline allows you to enter raffles at various events",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com///nextflow_schema.json",
+  "title": " pipeline parameters",
+  "description": "",
   "type": "object",
-  "definitions": {
+  "$defs": {
     "input_output_options": {
       "title": "Input/output options",
       "type": "object",
       "fa_icon": "fas fa-terminal",
       "description": "Define where the pipeline should find input data and save output data.",
+      "required": [
+        "email",
+        "event"
+      ],
       "properties": {
-        "event": {
-          "type": "string",
-          "default": "general",
-          "description": "Which event raffle to enter",
-          "enum": [
-            "general",
-            "ismb_bosc_2024",
-            "fog_2025",
-            "biotechx_2024",
-            "ashg_2024",
-            "slas_2025"
-          ],
-          "fa_icon": "fas fa-ticket-alt"
-        },
         "email": {
           "type": "string",
-          "description": "Email address for completion summary.",
+          "description": "Enter your email address here.",
           "fa_icon": "fas fa-envelope",
           "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
           "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-        }
-      },
-      "required": ["event", "email"]
-    },
-    "generic_options": {
-      "title": "Generic options",
-      "type": "object",
-      "fa_icon": "fas fa-file-import",
-      "description": "Less common options for the pipeline, typically set in a config file.",
-      "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
-      "properties": {
-        "help": {
-          "type": "boolean",
-          "description": "Display help text.",
-          "fa_icon": "fas fa-question-circle",
-          "hidden": true
+        },
+        "event": {
+          "type": "string",
+          "default": "fog_2025",
+          "description": "Which event are you attending?",
+          "enum": [
+            "general",
+            "slas_2025",
+            "fog_2025",
+            "ismb_bosc_2024",
+            "biotechx_2024",
+            "ashg_2024"
+          ],
+          "fa_icon": "fas fa-ticket-alt"
+        },
+        "outdir": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+          "fa_icon": "fas fa-folder-open",
+          "default": "results"
+        },
+        "ticket_number_emit_session_id": {
+          "type": "boolean"
         }
       }
     }
   },
   "allOf": [
     {
-      "$ref": "#/definitions/input_output_options"
-    },
-    {
-      "$ref": "#/definitions/generic_options"
+      "$ref": "#/$defs/input_output_options"
     }
-  ],
-  "properties": {
-    "event": {
-      "type": "string",
-      "default": "fog",
-      "fa_icon": "far fa-calendar-alt",
-      "description": "Which event are you participating in?",
-      "hidden": true
-    },
-    "outdir": {
-      "type": "string",
-      "default": "results",
-      "hidden": true
-    },
-    "ticket_number_emit_session_id": {
-      "type": "boolean",
-      "hidden": true
-    }
-  }
+  ]
 }
