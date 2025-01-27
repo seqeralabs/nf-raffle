@@ -64,7 +64,7 @@ workflow {
             ticket_number = params.ticket_number_emit_session_id ? SLAS_2025.out.session_id : SLAS_2025.out.run_name
             break
         default:
-            error "Unknown event: ${params.event}. Supported events are 'fog_2025', 'slas_2025', 'ismb_bosc2024', 'biotechx_basel_2024' and 'ashg_2024'
+            error "Unknown event: ${params.event}. Supported events are 'fog_2025', 'slas_2025', 'ismb_bosc2024', 'biotechx_basel_2024' and 'ashg_2024'"
     }
 
     PUBLISH_REPORT(html_report, event, ticket_number)
