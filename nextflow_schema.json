@@ -28,11 +28,11 @@
           "description": "Which event are you attending?",
           "enum": [
             "general",
-            "ismb_bosc_2024",
+            "slas_2025",
             "fog_2025",
+            "ismb_bosc_2024",
             "biotechx_2024",
-            "ashg_2024",
-            "slas_2025"
+            "ashg_2024"
           ],
           "fa_icon": "fas fa-ticket-alt"
         },
