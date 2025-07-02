@@ -6,6 +6,7 @@ include { ASHG_2024 }      from './workflows/ashg_2024'
 include { PUBLISH_REPORT } from './modules/local/publish_report'
 include { FOG25_WORKFLOW } from './workflows/fog_2025'
 include { SLAS_2025      } from './workflows/slas_2025'
+include { ISMB_2025      } from './workflows/ismb_2025'
 
 workflow {
     main:
@@ -63,8 +64,16 @@ workflow {
             event = "SLAS 2025"
             ticket_number = params.ticket_number_emit_session_id ? SLAS_2025.out.session_id : SLAS_2025.out.run_name
             break
+        case "ismb_2025":
+            if (!params.email) {
+                error "Please provide --email parameter to enter the raffle at ISMB 2025."
+            }
+            ISMB_2025()
+            event = "ISMB 2025"
+            ticket_number = params.ticket_number_emit_session_id ? ISMB_2025.out.session_id : ISMB_2025.out.run_name
+            break
         default:
-            error "Unknown event: ${params.event}. Supported events are 'fog_2025', 'slas_2025', 'ismb_bosc2024', 'biotechx_basel_2024' and 'ashg_2024'"
+            error "Unknown event: ${params.event}. Supported events are 'fog_2025', 'slas_2025', 'ismb_bosc2024', 'biotechx_basel_2024', 'ashg_2024' and 'ismb_2025'"
     }
 
     PUBLISH_REPORT(html_report, event, ticket_number)
@@ -80,6 +89,8 @@ workflow {
             - biotechx_basel_2024
             - ashg_2024
             - slas_2025
+            - fog_2025
+            - ismb_2025
 
         For more information for an event, use the --help flag for that event.
         """
