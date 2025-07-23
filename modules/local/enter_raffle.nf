@@ -5,7 +5,7 @@ process ENTER_RAFFLE {
     input:
     val next
     val email
-    val config_map
+    val config
 
     output:
     val workflow.sessionId, emit: session_id
@@ -13,8 +13,8 @@ process ENTER_RAFFLE {
 
     script:
     def platform_enabled = workflow.session.config.navigate('tower.enabled') ?: false
-    def destination = config_map.destination_url
-    def form_fields = config_map.form_fields
+    def destination = config.destination_url
+    def form_fields = config.form_fields
 
     // Build curl data arguments using nf-core style
     def email_cmd = form_fields.email ? "-d \"${form_fields.email}=${email}\"" : ""

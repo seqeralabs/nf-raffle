@@ -18,14 +18,6 @@ workflow {
 
     def config = new groovy.json.JsonSlurper().parse(config_file)
 
-    // Create configuration map for the process
-    def config_map = [
-        destination_url: config.destination_url,
-        form_fields: config.form_fields,
-        event_name: config.event_name,
-        help: config.help
-    ]
-
     // Print privacy policy information
     PRINT_PRIVACY_MESSAGE()
 
@@ -33,7 +25,7 @@ workflow {
     ENTER_RAFFLE(
         PRINT_PRIVACY_MESSAGE.out,
         params.email,
-        config_map,
+        config,
     )
 
     // Generate ticket
