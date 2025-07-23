@@ -1,5 +1,5 @@
 process PRINT_ASCII_LOGO {
-    tag "$logo"
+    tag "${logo}"
     label 'process_single'
 
     input:

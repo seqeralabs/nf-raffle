@@ -1,5 +1,5 @@
 process CONGRATULATIONS {
-    tag "$congrats"
+    tag "${congrats}"
     label 'process_single'
 
     input:

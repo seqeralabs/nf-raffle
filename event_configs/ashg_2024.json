@@ -1,0 +1,11 @@
+{
+  "event_name": "ASHG 2024",
+  "help": "Enter the raffle for ASHG 2024 conference. Requires only your email address to participate.",
+  "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScYvVDqRnRS3LfQMmz2yvt2sfGUbRhBevserv-0-67CnzKqMA/formResponse",
+  "form_fields": {
+    "email": "entry.1989429881",
+    "run_name": "entry.1998413591",
+    "hostname": "entry.939505606",
+    "platform_enabled": "entry.2099561215"
+  }
+}

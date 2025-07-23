@@ -1,0 +1,11 @@
+{
+  "event_name": "BioTechX Basel 2024",
+  "help": "Enter the raffle for BioTechX Basel 2024 conference. Requires only your email address to participate.",
+  "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeoMjSW7gt88WOGPCdy3hT--Rr2RJ_dp9yIQU1F2SOhQ-5xvw/formResponse",
+  "form_fields": {
+    "email": "entry.1764797758",
+    "run_name": "entry.957741798",
+    "uuid": "entry.1283336320",
+    "platform_enabled": "entry.524404923"
+  }
+}
