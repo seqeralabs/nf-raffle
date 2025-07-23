@@ -29,9 +29,9 @@ workflow {
     )
 
     // Generate ticket
-    html_report = Channel.fromPath("${projectDir}/assets/ticket_template.html")
+    html_report_template = Channel.fromPath("${projectDir}/assets/ticket_template.html")
     event_name = config.event_name
     ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
 
-    PUBLISH_REPORT(html_report, event_name, ticket_number)
+    PUBLISH_REPORT(html_report_template, event_name, ticket_number)
 }
