@@ -25,7 +25,7 @@ workflow {
     ENTER_RAFFLE(
         PRINT_PRIVACY_MESSAGE.out,
         params.email,
-        config,
+        config
     )
 
     // Generate ticket
