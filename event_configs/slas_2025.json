@@ -1,0 +1,11 @@
+{
+  "event_name": "SLAS 2025", 
+  "help": "Enter the raffle for SLAS 2025 conference. Requires only your email address to participate.",
+  "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScQ1o88GT57DPEBOi9mh14lX9QlIF7a9WDyoBjeUnBthF7JSA/formResponse",
+  "form_fields": {
+    "email": "entry.1829806584",
+    "run_name": "entry.55593741",
+    "hostname": "entry.1298715334",
+    "platform_enabled": "entry.2075010812"
+  }
+}

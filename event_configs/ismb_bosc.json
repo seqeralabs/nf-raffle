@@ -1,0 +1,12 @@
+{
+  "event_name": "ISMB BOSC 2024",
+  "help": "Enter the raffle for ISMB/BOSC 2024 conference. Requires only your email address to participate.",
+  "destination_url": "https://docs.google.com/forms/d/e/1FAIpQLSdMq7-GGEurHWch04106060iQyPQKlVxPSmq3Cqg2UDp2Rdj54A/formResponse",
+  "form_fields": {
+    "email": "entry.1980966312",
+    "run_name": "entry.829116482",
+    "hostname": "entry.692779728",
+    "uuid": "entry.1988410012",
+    "platform_enabled": "entry.1325573418"
+  }
+}

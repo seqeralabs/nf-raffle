@@ -1,0 +1,11 @@
+{
+  "event_name": "General Event",
+  "help": "General raffle entry for miscellaneous events. Requires only your email address to participate.",
+  "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScYvVDqRnRS3LfQMmz2yvt2sfGUbRhBevserv-0-67CnzKqMA/formResponse",
+  "form_fields": {
+    "email": "entry.1989429881",
+    "run_name": "entry.1998413591",
+    "hostname": "entry.939505606",
+    "platform_enabled": "entry.20995612152099561215"
+  }
+}

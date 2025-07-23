@@ -1,100 +1,45 @@
 #!/usr/bin/env nextflow
 
-include { ISMB_BOSC_2024 } from './workflows/ismb_bosc_2024'
-include { BIOTECHX_2024  } from './workflows/biotechx_basel_2024'
-include { ASHG_2024 }      from './workflows/ashg_2024'
-include { PUBLISH_REPORT } from './modules/local/publish_report'
-include { FOG25_WORKFLOW } from './workflows/fog_2025'
-include { SLAS_2025      } from './workflows/slas_2025'
-include { ISMB_2025      } from './workflows/ismb_2025'
+include { ENTER_RAFFLE          } from './modules/local/enter_raffle'
+include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message'
+include { PUBLISH_REPORT        } from './modules/local/publish_report'
 
 workflow {
-    main:
-    ascii       = Channel.fromPath("${projectDir}/assets/ismb_bosc2024/ismb_bosc_ascii_art.txt")
-    congrats    = Channel.fromPath("${projectDir}/assets/congratulations.txt")
+    // Default event to ismb_2025 if not specified
+    def event = params.event ?: 'ismb_2025'
+
+    // Validate required parameters
+    if (!params.email) {
+        error("Please provide --email parameter")
+    }
+
+    // Load event configuration
+    config_file = file("${projectDir}/event_configs/${event}.json", checkIfExists: true)
+
+    def config = new groovy.json.JsonSlurper().parse(config_file)
+
+    // Create configuration map for the process
+    def config_map = [
+        destination_url: config.destination_url,
+        form_fields: config.form_fields,
+        event_name: config.event_name,
+        help: config.help
+    ]
+
+    // Print privacy policy information
+    PRINT_PRIVACY_MESSAGE()
+
+    // Standard raffle entry for all events
+    ENTER_RAFFLE(
+        PRINT_PRIVACY_MESSAGE.out,
+        params.email,
+        config_map,
+    )
+
+    // Generate ticket
     html_report = Channel.fromPath("${projectDir}/assets/ticket_template.html")
+    event_name = config.event_name
+    ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
 
-    // Input validation
-    if (!params.event) {
-        error "Please specify an event using --event parameter"
-    }
-
-    // Event selection
-    switch(params.event) {
-        case "ismb_bosc2024":
-            if (!params.name || !params.email || !params.institute) {
-                error "Please provide --name, --email, and --institute parameters for ISMB/BOSC 2024"
-            }
-            ISMB_BOSC_2024(ascii, congrats)
-
-            event = "ISMB\\/BOSC 2024"
-            ticket_number = params.ticket_number_emit_session_id ? ISMB_BOSC_2024.out.session_id : ISMB_BOSC_2024.out.run_name
-            break
-
-        case "biotechx_basel_2024":
-            if (!params.email) {
-                error "Please provide --email parameter to enter the raffle at BiotechX Basel 2024."
-            }
-            BIOTECHX_2024()
-            event = "BiotechX BASEL 2024"
-            ticket_number = params.ticket_number_emit_session_id ? BIOTECHX_2024.out.session_id : BIOTECHX_2024.out.run_name
-
-            break
-        case "ashg_2024":
-            if (!params.email) {
-                error "Please provide --email parameter to enter the raffle at ASHG 2024."
-            }
-            ASHG_2024()
-            event = "ASHG 2024"
-            ticket_number = params.ticket_number_emit_session_id ? ASHG_2024.out.session_id : ASHG_2024.out.run_name
-            break
-        case "fog_2025":
-            if (!params.email) {
-                error "Please provide --email parameter to enter the raffle at FOG 2025."
-            }
-            FOG25_WORKFLOW()
-            event = "FOG 2025"
-            ticket_number = params.ticket_number_emit_session_id ? FOG25_WORKFLOW.out.session_id : FOG25_WORKFLOW.out.run_name
-            break
-        case "slas_2025":
-            if (!params.email) {
-                error "Please provide --email parameter to enter the raffle at SLAS 2025."
-            }
-            SLAS_2025()
-            event = "SLAS 2025"
-            ticket_number = params.ticket_number_emit_session_id ? SLAS_2025.out.session_id : SLAS_2025.out.run_name
-            break
-        case "ismb_2025":
-            if (!params.email) {
-                error "Please provide --email parameter to enter the raffle at ISMB 2025."
-            }
-            ISMB_2025()
-            event = "ISMB 2025"
-            ticket_number = params.ticket_number_emit_session_id ? ISMB_2025.out.session_id : ISMB_2025.out.run_name
-            break
-        default:
-            error "Unknown event: ${params.event}. Supported events are 'fog_2025', 'slas_2025', 'ismb_bosc2024', 'biotechx_basel_2024', 'ashg_2024' and 'ismb_2025'"
-    }
-
-    PUBLISH_REPORT(html_report, event, ticket_number)
-
-    // Display help message
-    if (params.help) {
-        log.info """
-        Usage:
-        nextflow run seqeralabs/nf-raffle --event [event_name]
-
-        Supported event names:
-            - ismb_bosc2024
-            - biotechx_basel_2024
-            - ashg_2024
-            - slas_2025
-            - fog_2025
-            - ismb_2025
-
-        For more information for an event, use the --help flag for that event.
-        """
-        System.exit(0)
-    }
-
+    PUBLISH_REPORT(html_report, event_name, ticket_number)
 }
