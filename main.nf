@@ -14,7 +14,7 @@ workflow {
     }
 
     // Load event configuration
-    config_file = file("${projectDir}/event_configs/${event}.json", checkIfExists: true)
+    def config_file = file("${projectDir}/event_configs/${event}.json", checkIfExists: true)
 
     def config = new groovy.json.JsonSlurper().parse(config_file)
 
