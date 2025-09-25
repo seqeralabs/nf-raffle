@@ -63,11 +63,10 @@ See further instructions [here](https://docs.seqera.io/platform-cloud/getting-st
 
 ## Privacy Notice
 
-By running this pipeline, you acknowledge that:
 
-- Your email address and system information will be submitted to the event organizers
-- This information is used solely for raffle administration
-- Check the privacy message displayed during execution for event-specific details
+We respect your data. By participating in the raffle, you agree that we may use ​this 
+information in accordance with our Privacy Policy (https://seqera.io/privacy-policy/)
+
 
 ## Support
 
