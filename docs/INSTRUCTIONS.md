@@ -18,7 +18,7 @@ The simplest way to enter a raffle is to type this into your terminal:
 nextflow run seqeralabs/nf-raffle --email your.email@example.com
 ```
 
-This will enter you into the default event (biotechx 2025).
+This will enter you into the default event (BiotechX 2025).
 
 ## Command Structure
 
