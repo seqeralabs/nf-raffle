@@ -47,18 +47,34 @@ workflow {
             =====================================
 
             Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
-            Simply enable Seqera Platform monitoring by either:
+            Simply enable Seqera Platform monitoring by:
 
-            1. Adding to your nextflow.config:
+            1. Create an account on https://cloud.seqera.io/
+            
+            2. Create an access token at https://cloud.seqera.io/tokens
+
+            3. Adding to your nextflow.config:
             tower {
                 enabled     = true
                 accessToken = 'your-token-here'
             }
 
-            2. Or set the environment variable:
-            export TOWER_ACCESS_TOKEN='your-token-here'
+            4. Run the pipeline with the additional configuration:
+            nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
 
             =====================================
+            """.stripIndent()
+        } else {
+            log.info """
+            ============================================
+            🎉 You earned extra raffle tickets! 🎉
+            ============================================
+
+            Because you used Seqera Platform for this workflow,
+            you have received additional entries to the raffle.
+
+            Thank you for using Seqera Platform and good luck!
+            ============================================
             """.stripIndent()
         }
     }

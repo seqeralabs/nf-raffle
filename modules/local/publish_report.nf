@@ -1,4 +1,5 @@
 process PUBLISH_REPORT {
+    tag "${event}: ${ticket_number}"
     publishDir "${params.outdir}", mode: 'copy'
 
     input:
