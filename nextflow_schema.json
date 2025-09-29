@@ -23,16 +23,7 @@
           "type": "string",
           "default": "biotechx_2025",
           "description": "Which event are you attending?",
-          "enum": [
-            "general",
-            "slas_2025",
-            "fog_2025",
-            "ismb_bosc_2024",
-            "biotechx_2024",
-            "ashg_2024",
-            "ismb_2025",
-            "biotechx_2025"
-          ],
+          "enum": ["slas_2025", "fog_2025", "ismb_2025", "biotechx_2025"],
           "fa_icon": "fas fa-ticket-alt"
         },
         "outdir": {

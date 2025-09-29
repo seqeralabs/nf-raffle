@@ -10,11 +10,7 @@ nf-raffle is a Nextflow pipeline designed to streamline the process of entering 
 
 Currently, the pipeline supports the following events:
 
-- ISMB/BOSC 2024      [--event ismb_bosc2024]
-- BiotechX Basel 2024 [--event biotechx_basel_2024]
-- ASHG 2024           [--event ashg_2024]
 - SLAS 2025           [--event slas_2025]
-- FOG 2025            [--event fog_2025]
 - ISMB 2025           [--event ismb_2025]
 - BiotechX 2025       [--event biotechx_2025] (default)
 
