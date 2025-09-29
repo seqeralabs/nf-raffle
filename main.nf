@@ -5,8 +5,8 @@ include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message'
 include { PUBLISH_REPORT        } from './modules/local/publish_report'
 
 workflow {
-    // Default event to ismb_2025 if not specified
-    def event = params.event ?: 'ismb_2025'
+    // Default event to biotechx_2025 if not specified
+    def event = params.event ?: 'biotechx_2025'
 
     // Validate required parameters
     if (!params.email) {

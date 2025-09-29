@@ -18,7 +18,7 @@ The simplest way to enter a raffle is to type this into your terminal:
 nextflow run seqeralabs/nf-raffle --email your.email@example.com
 ```
 
-This will enter you into the default event (ISMB 2025).
+This will enter you into the default event (biotechx 2025).
 
 ## Command Structure
 
@@ -63,10 +63,8 @@ See further instructions [here](https://docs.seqera.io/platform-cloud/getting-st
 
 ## Privacy Notice
 
-
-We respect your data. By participating in the raffle, you agree that we may use ​this 
-information in accordance with our Privacy Policy (https://seqera.io/privacy-policy/)
-
+We respect your data. By participating in the raffle, you agree that we may use ​this
+information in accordance with our Privacy Policy (<https://seqera.io/privacy-policy/>)
 
 ## Support
 
