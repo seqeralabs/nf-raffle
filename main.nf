@@ -34,4 +34,32 @@ workflow {
     ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
 
     PUBLISH_REPORT(html_report_template, event_name, ticket_number)
+
+    workflow.onComplete = {
+        // Check if Tower/Platform is disabled or access token is missing
+        def towerEnabled = session.config.navigate('tower.enabled') ?: false
+        def towerToken = session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+
+        if (!towerEnabled || !towerToken) {
+            log.warn """
+            =====================================
+            💡 Win more entries to the raffle! 💡
+            =====================================
+
+            Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
+            Simply enable Seqera Platform monitoring by either:
+
+            1. Adding to your nextflow.config:
+            tower {
+                enabled     = true
+                accessToken = 'your-token-here'
+            }
+
+            2. Or set the environment variable:
+            export TOWER_ACCESS_TOKEN='your-token-here'
+
+            =====================================
+            """.stripIndent()
+        }
+    }
 }
