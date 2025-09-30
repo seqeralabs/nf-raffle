@@ -5,8 +5,8 @@ include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message'
 include { PUBLISH_REPORT        } from './modules/local/publish_report'
 
 workflow {
-    // Default event to ismb_2025 if not specified
-    def event = params.event ?: 'ismb_2025'
+    // Default event to biotechx_2025 if not specified
+    def event = params.event ?: 'biotechx_2025'
 
     // Validate required parameters
     if (!params.email) {
@@ -34,4 +34,48 @@ workflow {
     ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
 
     PUBLISH_REPORT(html_report_template, event_name, ticket_number)
+
+    workflow.onComplete = {
+        // Check if Tower/Platform is disabled or access token is missing
+        def towerEnabled = session.config.navigate('tower.enabled') ?: false
+        def towerToken = session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+
+        if (!towerEnabled || !towerToken) {
+            log.warn """
+            =====================================
+            💡 Win more entries to the raffle! 💡
+            =====================================
+
+            Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
+            Simply enable Seqera Platform monitoring by:
+
+            1. Create an account on https://cloud.seqera.io/
+            
+            2. Create an access token at https://cloud.seqera.io/tokens
+
+            3. Adding to your nextflow.config:
+            tower {
+                enabled     = true
+                accessToken = 'your-token-here'
+            }
+
+            4. Run the pipeline with the additional configuration:
+            nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
+
+            =====================================
+            """.stripIndent()
+        } else {
+            log.info """
+            ============================================
+            🎉 You earned extra raffle tickets! 🎉
+            ============================================
+
+            Because you used Seqera Platform for this workflow,
+            you have received additional entries to the raffle.
+
+            Thank you for using Seqera Platform and good luck!
+            ============================================
+            """.stripIndent()
+        }
+    }
 }

@@ -1,0 +1,11 @@
+{
+  "event_name": "BiotechX 2025",
+  "help": "Enter the raffle for BiotechX 2025 conference. Requires only your email address to participate.",
+  "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScd6YnpNSp_pxLN8r-6GkOvsAW83ZLTbZ7IDmVXfIqQs3j8ig/formResponse",
+  "form_fields": {
+    "email": "entry.537648946",
+    "run_name": "entry.410682201",
+    "hostname": "entry.1595914190",
+    "platform_enabled": "entry.1251487277"
+  }
+}
