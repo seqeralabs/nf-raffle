@@ -16,7 +16,12 @@ Currently, the pipeline supports the following events:
 
 ## How to Run
 
-### Overview
+There are two ways to run the raffle:
+
+* From Seqera Platform at the booth. Come talk to us! 
+* From the Nextflow command line on your laptop (see below)
+
+### Overview 
 
 The nf-raffle pipeline guides you through an interactive raffle entry process where you'll provide your contact information and be entered into the event raffle. The pipeline uses Nextflow and integrates with Seqera Platform for enhanced functionality.
 
