@@ -1,0 +1,11 @@
+{
+  "event_name": "ASHG 2025",
+  "help": "Enter the raffle for ASHG 2025 conference. Requires only your email address to participate.",
+  "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeerxkvIm3VMsza8nYtoaCLZEMe2ZiH88mA_cqROfR6ajWYKg/formResponse",
+  "form_fields": {
+    "email": "entry.1829806584",
+    "run_name": "entry.55593741",
+    "uuid": "entry.1298715334",
+    "platform_enabled": "entry.2075010812"
+  }
+}
