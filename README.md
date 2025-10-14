@@ -89,7 +89,7 @@ export TOWER_ACCESS_TOKEN=your_token_here
 ### Step 5: Run the Pipeline
 
 ```bash
-nextflow run seqeralabs/nf-raffle -with-tower
+nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT -with-tower 
 ```
 
 Add `--event [event_name]` to specify one of the supported events (defaults to `ashg_2025` if not specified).
