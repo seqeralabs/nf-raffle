@@ -1,7 +1,7 @@
 process CONGRATULATIONS {
     tag "${congrats}"
     label 'process_single'
-    container 'alpine:3.23'
+    container 'ubuntu:24.04'
 
     input:
     path congrats
