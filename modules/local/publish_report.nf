@@ -1,6 +1,7 @@
 process PUBLISH_REPORT {
     tag "${event}: ${ticket_number}"
     publishDir "${params.outdir}", mode: 'copy'
+    container 'ubuntu:24.04'
 
     input:
     path html_report

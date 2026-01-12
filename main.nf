@@ -37,8 +37,8 @@ workflow {
 
     workflow.onComplete = {
         // Check if Tower/Platform is disabled or access token is missing
-        def towerEnabled = session.config.navigate('tower.enabled') ?: false
-        def towerToken = session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+        def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
+        def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
 
         if (!towerEnabled || !towerToken) {
             log.warn """
