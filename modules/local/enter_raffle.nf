@@ -1,7 +1,8 @@
 process ENTER_RAFFLE {
     tag "${email}"
     label 'process_single'
-    conda "${projectDir}/envs/curl-utils.yml"
+    container 'community.wave.seqera.io/library/curl_util-linux_procps-ng:72cd763bb8c83eca'
+    conda "curl util-linux procps-ng"
 
     input:
     val next
