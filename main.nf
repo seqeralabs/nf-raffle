@@ -5,9 +5,6 @@ include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/ma
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
 workflow {
-    // Set default outdir to workDir/reports for S3 accessibility on Seqera Platform
-    params.outdir = params.outdir ?: "${workflow.workDir}/reports"
-
     // Default event to ASHG 2025 if not specified
     def event = params.event ?: 'ashg_2025'
 
