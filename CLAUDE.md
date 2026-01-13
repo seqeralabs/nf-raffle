@@ -55,7 +55,7 @@ Required environment variable for Seqera Platform: `TOWER_ACCESS_TOKEN`
 |-----------|---------|-------------|
 | `--email` | (required) | Participant email |
 | `--event` | `ashg_2025` | Event identifier |
-| `--outdir` | `${projectDir}/reports` | Output directory |
+| `--outdir` | `${workDir}/reports` | Output directory (defaults to workDir for S3 accessibility) |
 | `--ticket_number_emit_session_id` | `false` | Use session ID instead of run name |
 
 ## Adding a New Event
