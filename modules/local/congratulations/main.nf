@@ -1,18 +1,15 @@
-process PRINT_ASCII_LOGO {
-    tag "${logo}"
+process CONGRATULATIONS {
+    tag "${congrats}"
     label 'process_single'
     container 'community.wave.seqera.io/library/sed_coreutils_procps-ng:749edc0a4a6c3ef9'
-    conda "sed coreutils procps-ng"
+    conda "${moduleDir}/environment.yml"
 
     input:
-    path logo
+    path congrats
     val next
-
-    output:
-    val true
 
     script:
     """
-    cat ${logo}
+    cat ${congrats}
     """
 }

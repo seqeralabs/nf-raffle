@@ -1,7 +1,0 @@
-channels:
-  - conda-forge
-  - defaults
-dependencies:
-  - sed
-  - coreutils  # provides cp, cat, and other basic utilities
-  - procps-ng  # provides ps and other process utilities

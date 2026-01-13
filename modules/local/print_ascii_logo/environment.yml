@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+dependencies:
+  - sed=4.9
+  - coreutils=9.5
+  - procps-ng=4.0.4

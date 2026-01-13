@@ -1,3 +1,10 @@
 work/**
 .nextflow*
 results/**
+reports/**
+
+# Claude Code
+.claude/
+
+# Nextflow lineage
+.lineage

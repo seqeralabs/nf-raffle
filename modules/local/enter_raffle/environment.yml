@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+dependencies:
+  - curl=8.18.0
+  - util-linux=2.41.3
+  - procps-ng=4.0.4
