@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - curl
+  - util-linux  # provides uuidgen
+  - procps-ng   # provides ps and other process utilities

@@ -1,7 +1,7 @@
 process PRINT_ASCII_LOGO {
     tag "${logo}"
     label 'process_single'
-    container 'docker.io/ubuntu:24.04'
+    conda "${projectDir}/envs/basic-utils.yml"
 
     input:
     path logo

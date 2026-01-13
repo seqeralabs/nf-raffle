@@ -1,7 +1,7 @@
 process ENTER_RAFFLE {
     tag "${email}"
     label 'process_single'
-    container 'docker.io/buildpack-deps:curl'
+    conda "${projectDir}/envs/curl-utils.yml"
 
     input:
     val next

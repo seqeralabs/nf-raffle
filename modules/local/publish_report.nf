@@ -1,7 +1,7 @@
 process PUBLISH_REPORT {
     tag "${event}: ${ticket_number}"
     publishDir "${params.outdir}", mode: 'copy'
-    container 'docker.io/ubuntu:24.04'
+    conda "${projectDir}/envs/basic-utils.yml"
 
     input:
     path html_report
