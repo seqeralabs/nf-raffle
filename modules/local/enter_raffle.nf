@@ -1,7 +1,7 @@
 process ENTER_RAFFLE {
     tag "${email}"
     label 'process_single'
-    container 'ubuntu:24.04'
+    container 'docker.io/buildpack-deps:curl'
 
     input:
     val next
