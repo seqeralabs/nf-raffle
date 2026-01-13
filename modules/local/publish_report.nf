@@ -1,7 +1,8 @@
 process PUBLISH_REPORT {
     tag "${event}: ${ticket_number}"
     publishDir "${params.outdir}", mode: 'copy'
-    conda "${projectDir}/envs/basic-utils.yml"
+    container 'community.wave.seqera.io/library/sed_coreutils_procps-ng:749edc0a4a6c3ef9'
+    conda "sed coreutils procps-ng"
 
     input:
     path html_report
