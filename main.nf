@@ -1,8 +1,8 @@
 #!/usr/bin/env nextflow
 
-include { ENTER_RAFFLE          } from './modules/local/enter_raffle'
-include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message'
-include { PUBLISH_REPORT        } from './modules/local/publish_report'
+include { ENTER_RAFFLE          } from './modules/local/enter_raffle/main'
+include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/main'
+include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
 workflow {
     // Default event to ASHG 2025 if not specified
@@ -37,8 +37,8 @@ workflow {
 
     workflow.onComplete = {
         // Check if Tower/Platform is disabled or access token is missing
-        def towerEnabled = session.config.navigate('tower.enabled') ?: false
-        def towerToken = session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+        def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
+        def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
 
         if (!towerEnabled || !towerToken) {
             log.warn """

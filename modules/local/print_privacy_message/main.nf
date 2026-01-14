@@ -10,7 +10,7 @@ process PRINT_PRIVACY_MESSAGE {
 --------------
 Privacy notice
 --------------
-We respect your data. By submitting this form, you agree that we may use ​this 
+We respect your data. By submitting this form, you agree that we may use ​this
 information in accordance with our Privacy Policy (https://seqera.io/privacy-policy/).
 """.stripIndent()
     )
