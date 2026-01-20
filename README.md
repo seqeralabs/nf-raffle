@@ -13,7 +13,7 @@ nf-raffle is a Nextflow pipeline designed to streamline the process of entering 
 
 Currently, the pipeline supports the following events:
 
-- FOG 2026            [--event fog_2026] (default)
+- FOG 2026            [`--event fog_2026`] (default)
 
 ## How to Run
 
