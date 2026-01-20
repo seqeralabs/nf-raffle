@@ -9,11 +9,11 @@ nf-raffle is a Nextflow pipeline for managing event raffles at Seqera-sponsored 
 ## Running the Pipeline
 
 ```bash
-# Basic run (defaults to ashg_2025 event)
+# Basic run (defaults to fog_2026 event)
 nextflow run main.nf --email user@example.com
 
 # Specify event
-nextflow run main.nf --email user@example.com --event slas_2025
+nextflow run main.nf --email user@example.com --event fog_2026
 
 # With Docker profile
 nextflow run main.nf --email user@example.com -profile docker
@@ -54,7 +54,7 @@ Required environment variable for Seqera Platform: `TOWER_ACCESS_TOKEN`
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `--email` | (required) | Participant email |
-| `--event` | `ashg_2025` | Event identifier |
+| `--event` | `fog_2026` | Event identifier |
 | `--outdir` | `results` | Output directory |
 | `--ticket_number_emit_session_id` | `false` | Use session ID instead of run name |
 

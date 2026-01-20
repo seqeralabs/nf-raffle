@@ -10,10 +10,7 @@ nf-raffle is a Nextflow pipeline designed to streamline the process of entering 
 
 Currently, the pipeline supports the following events:
 
-- SLAS 2025           [--event slas_2025]
-- ISMB 2025           [--event ismb_2025]
-- BiotechX 2025       [--event biotechx_2025]
-- ASHG 2025           [--event ashg_2025] (default)
+- FOG 2026            [--event fog_2026] (default)
 
 ## How to Run
 
@@ -30,7 +27,7 @@ If you are already familiar with Nextflow, you can enter the raffle the followin
 
 1. Ensure you have a Seqera Platform access token set as `TOWER_ACCESS_TOKEN` in your environment.
 2. Run the Nextflow pipeline `seqeralabs/nf-raffle`
-3. (Optional) Add `--event [event_name]` to specify one of the supported events (defaults to `ashg_2025` if not specified).
+3. (Optional) Add `--event [event_name]` to specify one of the supported events (defaults to `fog_2026` if not specified).
 
 Below are detailed instructions for new users.
 
@@ -92,4 +89,4 @@ export TOWER_ACCESS_TOKEN=your_token_here
 nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT -with-tower 
 ```
 
-Add `--event [event_name]` to specify one of the supported events (defaults to `ashg_2025` if not specified).
+Add `--event [event_name]` to specify one of the supported events (defaults to `fog_2026` if not specified).
