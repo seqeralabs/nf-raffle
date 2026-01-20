@@ -25,6 +25,7 @@ workflow {
     ENTER_RAFFLE(
         PRINT_PRIVACY_MESSAGE.out,
         params.email,
+        params.affiliation,
         config
     )
 

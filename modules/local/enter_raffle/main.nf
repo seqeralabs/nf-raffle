@@ -7,6 +7,7 @@ process ENTER_RAFFLE {
     input:
     val next
     val email
+    val affiliation
     val config
 
     output:
@@ -24,6 +25,7 @@ process ENTER_RAFFLE {
     def hostname_cmd = form_fields.hostname ? "-d \"${form_fields.hostname}=\$(hostname)\"" : ""
     def uuid_cmd = form_fields.uuid ? "-d \"${form_fields.uuid}=\$(uuidgen)\"" : ""
     def platform_cmd = form_fields.platform_enabled ? "-d \"${form_fields.platform_enabled}=${platform_enabled}\"" : ""
+    def affiliation_cmd = form_fields.affiliation && affiliation ? "-d \"${form_fields.affiliation}=${affiliation}\"" : ""
 
     """
     curl -X POST \\
@@ -32,6 +34,7 @@ process ENTER_RAFFLE {
         ${hostname_cmd} \\
         ${uuid_cmd} \\
         ${platform_cmd} \\
+        ${affiliation_cmd} \\
         "${destination}"
     """
 }
