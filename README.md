@@ -1,5 +1,7 @@
 # 🎟️ nf-raffle
 
+> **[Click here for instructions on how to enter the raffle](https://seqeralabs.github.io/nf-raffle/)**
+
 This repository contains code for the nf-raffle pipeline, which is used for managing raffles at events attended or sponsored by Seqera.
 
 ## Description
