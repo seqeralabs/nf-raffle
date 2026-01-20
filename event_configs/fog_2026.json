@@ -1,6 +1,7 @@
 {
   "event_name": "FOG 2026",
   "help": "Enter the raffle for FOG 2026 conference. Requires only your email address to participate.",
+  "winner_announcement": "2pm on January 29th, 2026",
   "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdSXKdsgGIbvZsguo2JFOtLLSTx4Y-Cjajn_2SbB3fEcN4qig/formResponse",
   "form_fields": {
     "email": "entry.1651967523",

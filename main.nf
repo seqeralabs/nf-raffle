@@ -19,7 +19,7 @@ workflow {
     def config = new groovy.json.JsonSlurper().parse(config_file)
 
     // Print privacy policy information
-    PRINT_PRIVACY_MESSAGE()
+    PRINT_PRIVACY_MESSAGE(config)
 
     // Standard raffle entry for all events
     ENTER_RAFFLE(
@@ -34,7 +34,8 @@ workflow {
     event_name = config.event_name
     ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
 
-    PUBLISH_REPORT(html_report_template, event_name, ticket_number)
+    winner_announcement = config.winner_announcement ?: ""
+    PUBLISH_REPORT(html_report_template, event_name, ticket_number, winner_announcement)
 
     workflow.onComplete = {
         // Check if Tower/Platform is disabled or access token is missing
