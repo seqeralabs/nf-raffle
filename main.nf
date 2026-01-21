@@ -5,8 +5,8 @@ include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/ma
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
 workflow {
-    // Default event to ASHG 2025 if not specified
-    def event = params.event ?: 'ashg_2025'
+    // Default event to FOG 2026 if not specified
+    def event = params.event ?: 'fog_2026'
 
     // Validate required parameters
     if (!params.email) {
@@ -19,12 +19,13 @@ workflow {
     def config = new groovy.json.JsonSlurper().parse(config_file)
 
     // Print privacy policy information
-    PRINT_PRIVACY_MESSAGE()
+    PRINT_PRIVACY_MESSAGE(config)
 
     // Standard raffle entry for all events
     ENTER_RAFFLE(
         PRINT_PRIVACY_MESSAGE.out,
         params.email,
+        params.affiliation,
         config
     )
 
@@ -33,7 +34,8 @@ workflow {
     event_name = config.event_name
     ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
 
-    PUBLISH_REPORT(html_report_template, event_name, ticket_number)
+    winner_announcement = config.winner_announcement ?: ""
+    PUBLISH_REPORT(html_report_template, event_name, ticket_number, winner_announcement)
 
     workflow.onComplete = {
         // Check if Tower/Platform is disabled or access token is missing

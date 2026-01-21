@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter the nf-raffle | Seqera</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #efefef;
+            color: #180f28;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: #180f28;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Main content */
+        main {
+            padding: 40px 0;
+        }
+
+        h2 {
+            color: #180f28;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0DC09D;
+        }
+
+        /* Quick Start */
+        .quick-start {
+            background: #180f28;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .quick-start h2 {
+            color: white;
+            border-bottom-color: #0DC09D;
+            margin-bottom: 15px;
+        }
+
+        .quick-start p {
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .command-block {
+            background: #0d0a12;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .command-block code {
+            color: #0DC09D;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #0DC09D;
+            color: #180f28;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+
+        .copy-btn.copied {
+            background: #888;
+            color: white;
+        }
+
+        /* Steps */
+        .steps {
+            margin-bottom: 40px;
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: #0DC09D;
+            color: #180f28;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #180f28;
+        }
+
+        .step-content p {
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .step-content code {
+            background: #d8d8d8;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: block;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            color: #180f28;
+        }
+
+        .step-content a {
+            color: #0DC09D;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .step-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Bonus section */
+        .bonus {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            border: 2px dashed #0DC09D;
+        }
+
+        .bonus h2 {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 10px;
+        }
+
+        /* Privacy */
+        .privacy {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-left: 4px solid #0DC09D;
+        }
+
+        .privacy h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .privacy p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .privacy a {
+            color: #0DC09D;
+        }
+
+        /* Footer */
+        footer {
+            background: #180f28;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #0DC09D;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-logo {
+            height: 30px;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .step {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .step-number {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+
+            .command-block code {
+                font-size: 0.75rem;
+            }
+
+            .copy-btn {
+                position: static;
+                display: block;
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera_logo_color_darkbg.svg" alt="Seqera" class="logo">
+        <h1>Enter the nf-raffle</h1>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="quick-start">
+                <h2>Quick Start</h2>
+                <p>Have Nextflow installed? Run this command to enter:</p>
+                <div class="command-block">
+                    <code>nextflow run seqeralabs/nf-raffle --email YOUR_EMAIL</code>
+                    <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
+                </div>
+            </div>
+
+            <section class="steps">
+                <h2>How to Enter from the Command Line</h2>
+
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Install Nextflow</h3>
+                        <p>Nextflow requires Java 11 or later. Install with this command:</p>
+                        <code>curl -s https://get.nextflow.io | bash</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Run the Pipeline</h3>
+                        <p>Enter the raffle by running (replace with your email):</p>
+                        <code>nextflow run seqeralabs/nf-raffle --email your.email@example.com</code>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bonus">
+                <h2>Bonus Ticket: Connect to Seqera Platform</h2>
+                <p style="margin-bottom: 20px; color: #444;">A Seqera Platform account isn't required, but connecting your run earns you an extra raffle ticket!</p>
+
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Create a Free Seqera Platform Account</h3>
+                        <p>Sign up at <a href="https://cloud.seqera.io" target="_blank">cloud.seqera.io</a> using the same email you'll use for the raffle.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Authenticate with Seqera Platform</h3>
+                        <p>Run this command, follow the browser prompts, and select <strong>Yes</strong> when asked to enable workflow monitoring:</p>
+                        <code>nextflow auth login</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Run the Pipeline</h3>
+                        <p>Your runs are now automatically monitored by Seqera Platform:</p>
+                        <code>nextflow run seqeralabs/nf-raffle --email your.email@example.com</code>
+                    </div>
+                </div>
+            </section>
+
+            <section class="steps">
+                <h2>How to Enter from Seqera Platform</h2>
+                <p style="margin-bottom: 20px; color: #444;">Already have Seqera Platform configured with a compute environment? Launch directly from the web interface.</p>
+
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Add the Pipeline</h3>
+                        <p>Go to <strong>Launchpad</strong>, click <strong>Add pipeline</strong>, and enter:</p>
+                        <code>https://github.com/seqeralabs/nf-raffle</code>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Launch</h3>
+                        <p>Select a compute environment, enter your email in the <strong>email</strong> parameter field, and click <strong>Launch</strong>.</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 15px; color: #666; font-size: 0.9rem;">Note: This requires a <a href="https://docs.seqera.io/platform/latest/compute-envs/overview" target="_blank" style="color: #0DC09D;">compute environment</a> to be configured in your workspace to run the pipeline.</p>
+            </section>
+
+            <div class="privacy">
+                <h3>Privacy Notice</h3>
+                <p>By participating, you agree to Seqera's <a href="https://seqera.io/privacy-policy/" target="_blank">Privacy Policy</a>. We only use your information for raffle purposes.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="https://github.com/seqeralabs/nf-raffle" target="_blank">GitHub Repository</a>
+            <a href="https://seqera.io" target="_blank">Seqera.io</a>
+            <a href="https://cloud.seqera.io" target="_blank">Seqera Platform</a>
+        </div>
+        <img src="https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera_logo_color_darkbg.svg" alt="Seqera" class="footer-logo">
+    </footer>
+
+    <script>
+        function copyCommand(btn) {
+            const code = btn.previousElementSibling.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
