@@ -38,6 +38,21 @@ Required environment variable for Seqera Platform: `TOWER_ACCESS_TOKEN`
 - `destination_url`: Google Form submission URL
 - `form_fields`: Mapping of data fields to Google Form entry IDs
 
+### Demo Detection Fields
+
+The pipeline captures workflow context to distinguish demo runs (by Seqera employees) from external participant runs:
+
+| Field | Source | Purpose |
+|-------|--------|---------|
+| `user_name` | `workflow.userName` | System username running the pipeline |
+| `workspace_id` | `TOWER_WORKSPACE_ID` env var | Seqera Platform workspace ID (set when running on Platform) |
+| `platform_workflow_id` | `TOWER_WORKFLOW_ID` env var | Set when pipeline is launched FROM Seqera Platform |
+
+**Detection scenarios:**
+- **Local run**: Only `user_name` populated
+- **Run with `-with-tower`**: `user_name` + `workspace_id` populated
+- **Run FROM Seqera Platform**: All three fields populated
+
 **Modules** (`modules/local/`):
 - `enter_raffle.nf` - Core logic; builds curl command from event config
 - `print_privacy_message.nf` - Pure Groovy exec block (no container needed)
@@ -63,5 +78,7 @@ Required environment variable for Seqera Platform: `TOWER_ACCESS_TOKEN`
 1. Create `event_configs/<event_name>.json` with:
    - `event_name`: Human-readable name
    - `destination_url`: Google Form formResponse URL
-   - `form_fields`: Map field names (`email`, `run_name`, `uuid`, `platform_enabled`) to form entry IDs
+   - `form_fields`: Map field names to form entry IDs:
+     - `email`, `run_name`, `uuid`, `hostname`, `platform_enabled` (core fields)
+     - `user_name`, `workspace_id`, `platform_workflow_id` (demo detection fields)
 2. Update README.md to document the new `--event` option

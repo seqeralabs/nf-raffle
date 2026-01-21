@@ -19,22 +19,25 @@ process ENTER_RAFFLE {
     def destination = config.destination_url
     def form_fields = config.form_fields
 
-    // Build curl data arguments using nf-core style
-    def email_cmd = form_fields.email ? "-d \"${form_fields.email}=${email}\"" : ""
-    def run_name_cmd = form_fields.run_name ? "-d \"${form_fields.run_name}=${workflow.runName}\"" : ""
-    def hostname_cmd = form_fields.hostname ? "-d \"${form_fields.hostname}=\$(hostname)\"" : ""
-    def uuid_cmd = form_fields.uuid ? "-d \"${form_fields.uuid}=\$(uuidgen)\"" : ""
-    def platform_cmd = form_fields.platform_enabled ? "-d \"${form_fields.platform_enabled}=${platform_enabled}\"" : ""
-    def affiliation_cmd = form_fields.affiliation && affiliation ? "-d \"${form_fields.affiliation}=${affiliation}\"" : ""
+    // Capture workflow context for demo detection
+    def user_name = workflow.userName ?: ''
+    def workspace_id = System.getenv('TOWER_WORKSPACE_ID') ?: ''
+    def platform_workflow_id = System.getenv('TOWER_WORKFLOW_ID') ?: ''
+
+    // Build curl data arguments - collect non-empty args into a list
+    def curl_args = []
+    if (form_fields.email) curl_args << "-d \"${form_fields.email}=${email}\""
+    if (form_fields.run_name) curl_args << "-d \"${form_fields.run_name}=${workflow.runName}\""
+    if (form_fields.hostname) curl_args << "-d \"${form_fields.hostname}=\$(hostname)\""
+    if (form_fields.uuid) curl_args << "-d \"${form_fields.uuid}=\$(uuidgen)\""
+    if (form_fields.platform_enabled) curl_args << "-d \"${form_fields.platform_enabled}=${platform_enabled}\""
+    if (form_fields.affiliation && affiliation) curl_args << "-d \"${form_fields.affiliation}=${affiliation}\""
+    if (form_fields.user_name) curl_args << "-d \"${form_fields.user_name}=${user_name}\""
+    if (form_fields.workspace_id) curl_args << "-d \"${form_fields.workspace_id}=${workspace_id}\""
+    if (form_fields.platform_workflow_id) curl_args << "-d \"${form_fields.platform_workflow_id}=${platform_workflow_id}\""
+    def curl_data = curl_args.join(' ')
 
     """
-    curl -X POST \\
-        ${email_cmd} \\
-        ${run_name_cmd} \\
-        ${hostname_cmd} \\
-        ${uuid_cmd} \\
-        ${platform_cmd} \\
-        ${affiliation_cmd} \\
-        "${destination}"
+    curl -X POST ${curl_data} "${destination}"
     """
 }
