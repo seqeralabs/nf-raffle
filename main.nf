@@ -4,6 +4,50 @@ include { ENTER_RAFFLE          } from './modules/local/enter_raffle/main'
 include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/main'
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
+def printPrivacyMessage() {
+    // Check if Tower/Platform is disabled or access token is missing
+    def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
+    def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+
+    if (!towerEnabled || !towerToken) {
+        return """
+        =====================================
+        Win more entries to the raffle!
+        =====================================
+
+        Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
+        Simply enable Seqera Platform monitoring by:
+
+        1. Create an account on https://cloud.seqera.io/
+
+        2. Create an access token at https://cloud.seqera.io/tokens
+
+        3. Adding to your nextflow.config:
+        tower {
+            enabled     = true
+            accessToken = 'your-token-here'
+        }
+
+        4. Run the pipeline with the additional configuration:
+        nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
+
+        =====================================
+        """.stripIndent()
+    } else {
+        return """
+        ============================================
+        You earned extra raffle tickets!
+        ============================================
+
+        Because you used Seqera Platform for this workflow,
+        you have received additional entries to the raffle.
+
+        Thank you for using Seqera Platform and good luck!
+        ============================================
+        """.stripIndent()
+    }
+}
+
 workflow NF_RAFFLE {
     take:
     email
@@ -53,48 +97,16 @@ workflow {
     // Run the main workflow
     NF_RAFFLE(ch_email, ch_config, ch_template)
 
-    // onComplete handler
-    workflow.onComplete = {
-        // Check if Tower/Platform is disabled or access token is missing
-        def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
-        def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+    publish:
+    raffle_ticket = NF_RAFFLE.out.raffle_ticket
+}
 
-        if (!towerEnabled || !towerToken) {
-            log.warn """
-            =====================================
-            Win more entries to the raffle!
-            =====================================
-
-            Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
-            Simply enable Seqera Platform monitoring by:
-
-            1. Create an account on https://cloud.seqera.io/
-
-            2. Create an access token at https://cloud.seqera.io/tokens
-
-            3. Adding to your nextflow.config:
-            tower {
-                enabled     = true
-                accessToken = 'your-token-here'
-            }
-
-            4. Run the pipeline with the additional configuration:
-            nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
-
-            =====================================
-            """.stripIndent()
-        } else {
-            log.info """
-            ============================================
-            You earned extra raffle tickets!
-            ============================================
-
-            Because you used Seqera Platform for this workflow,
-            you have received additional entries to the raffle.
-
-            Thank you for using Seqera Platform and good luck!
-            ============================================
-            """.stripIndent()
-        }
+output {
+    raffle_ticket {
+        path '.'
     }
+}
+
+workflow.onComplete {
+    println printPrivacyMessage()
 }
