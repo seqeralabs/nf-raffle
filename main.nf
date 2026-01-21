@@ -4,7 +4,35 @@ include { ENTER_RAFFLE          } from './modules/local/enter_raffle/main'
 include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/main'
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
+workflow NF_RAFFLE {
+    take:
+    email
+    config
+    html_report_template
+
+    main:
+    // Print privacy policy information
+    PRINT_PRIVACY_MESSAGE()
+
+    // Standard raffle entry for all events
+    ENTER_RAFFLE(
+        PRINT_PRIVACY_MESSAGE.out,
+        email,
+        config
+    )
+
+    // Generate ticket
+    def event_name = config.event_name
+    def ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
+
+    PUBLISH_REPORT(html_report_template, event_name, ticket_number)
+
+    emit:
+    raffle_ticket = PUBLISH_REPORT.out
+}
+
 workflow {
+    main:
     // Default event to ASHG 2025 if not specified
     def event = params.event ?: 'ashg_2025'
 
@@ -15,26 +43,17 @@ workflow {
 
     // Load event configuration
     def config_file = file("${projectDir}/event_configs/${event}.json", checkIfExists: true)
-
     def config = new groovy.json.JsonSlurper().parse(config_file)
 
-    // Print privacy policy information
-    PRINT_PRIVACY_MESSAGE()
+    // Create input channels
+    ch_email = Channel.value(params.email)
+    ch_config = Channel.value(config)
+    ch_template = Channel.fromPath("${projectDir}/assets/ticket_template.html")
 
-    // Standard raffle entry for all events
-    ENTER_RAFFLE(
-        PRINT_PRIVACY_MESSAGE.out,
-        params.email,
-        config
-    )
+    // Run the main workflow
+    NF_RAFFLE(ch_email, ch_config, ch_template)
 
-    // Generate ticket
-    html_report_template = Channel.fromPath("${projectDir}/assets/ticket_template.html")
-    event_name = config.event_name
-    ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
-
-    PUBLISH_REPORT(html_report_template, event_name, ticket_number)
-
+    // onComplete handler
     workflow.onComplete = {
         // Check if Tower/Platform is disabled or access token is missing
         def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
@@ -43,14 +62,14 @@ workflow {
         if (!towerEnabled || !towerToken) {
             log.warn """
             =====================================
-            💡 Win more entries to the raffle! 💡
+            Win more entries to the raffle!
             =====================================
 
             Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
             Simply enable Seqera Platform monitoring by:
 
             1. Create an account on https://cloud.seqera.io/
-            
+
             2. Create an access token at https://cloud.seqera.io/tokens
 
             3. Adding to your nextflow.config:
@@ -67,7 +86,7 @@ workflow {
         } else {
             log.info """
             ============================================
-            🎉 You earned extra raffle tickets! 🎉
+            You earned extra raffle tickets!
             ============================================
 
             Because you used Seqera Platform for this workflow,
