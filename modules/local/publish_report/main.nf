@@ -17,8 +17,8 @@ process PUBLISH_REPORT {
     def winner_text = winner_announcement ? "Winner announced ${winner_announcement}" : ""
     """
     cp ${html_report} raffle_ticket.html
-    sed -i -e 's/EVENT/${event}/g' raffle_ticket.html
-    sed -i -e 's/TICKET_NUMBER/${ticket_number}/g' raffle_ticket.html
-    sed -i -e 's/WINNER_ANNOUNCEMENT/${winner_text}/g' raffle_ticket.html
+    sed -i -e 's|EVENT|${event}|g' raffle_ticket.html
+    sed -i -e 's|TICKET_NUMBER|${ticket_number}|g' raffle_ticket.html
+    sed -i -e 's|WINNER_ANNOUNCEMENT|${winner_text}|g' raffle_ticket.html
     """
 }

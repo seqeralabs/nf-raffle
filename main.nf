@@ -18,6 +18,23 @@ workflow {
 
     def config = new groovy.json.JsonSlurper().parse(config_file)
 
+    // Validate participant-supplied fields this event marks as required. The
+    // required_fields list is per-event, so other events are unaffected
+    // (e.g. fog_2026 keeps affiliation optional). Any field marked Required in
+    // the event's Google Form must be listed here so the pipeline always sends
+    // a value and the form's required-field validation never rejects the entry.
+    def required_field_params = [
+        email      : params.email,
+        first_name : params.first_name,
+        last_name  : params.last_name,
+        affiliation: params.affiliation,
+    ]
+    config.required_fields?.each { fld ->
+        if (required_field_params.containsKey(fld) && !required_field_params[fld]) {
+            error("This event (${event}) requires --${fld}")
+        }
+    }
+
     // Print privacy policy information
     PRINT_PRIVACY_MESSAGE(config)
 
@@ -26,6 +43,8 @@ workflow {
         PRINT_PRIVACY_MESSAGE.out,
         params.email,
         params.affiliation,
+        params.first_name,
+        params.last_name,
         config
     )
 
