@@ -60,11 +60,11 @@
 
         .card__face--front {
             background-color: #ffffff;
-            background-image: url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera_logo_color.svg");
-            background-repeat: no-repeat; /* Added to prevent repeating */
+            background-image: url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera_logo_color.svg"), url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/ticket_background_light.svg");
+            background-repeat: no-repeat, no-repeat;
             background-origin: content-box;
-            background-position: center;
-            background-size: 70%; /* leave whitespace padding around the logo */
+            background-position: center, center;
+            background-size: 55%, contain; /* logo centered over the scalloped ticket */
         }
 
         .card__face--back {
