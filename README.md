@@ -14,7 +14,7 @@ nf-raffle is a Nextflow pipeline designed to streamline the process of entering 
 Currently, the pipeline supports the following events:
 
 - FOG 2026            [`--event fog_2026`] (default)
-- BOSC 2026           [`--event bosc_2026`] (requires `--first_name` and `--last_name`)
+- ISMB/BOSC 2026      [`--event bosc_2026`] (requires `--first_name`, `--last_name`, and `--affiliation`)
 
 ## How to Run
 
@@ -95,7 +95,7 @@ nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT -with-tower
 
 Add `--event [event_name]` to specify one of the supported events (defaults to `fog_2026` if not specified).
 
-Some events request additional details. **BOSC 2026** requires your first and last name, and optionally your organization:
+Some events request additional details. **ISMB/BOSC 2026** requires your first and last name, and your organization:
 
 ```bash
 nextflow run seqeralabs/nf-raffle --email EMAIL --event bosc_2026 \
