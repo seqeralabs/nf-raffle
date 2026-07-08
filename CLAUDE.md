@@ -71,8 +71,8 @@ The pipeline captures workflow context to distinguish demo runs (by Seqera emplo
 | `--email` | (required) | Participant email |
 | `--event` | `fog_2026` | Event identifier |
 | `--affiliation` | `""` | Company/institution (organization) |
-| `--first_name` | `""` | First name; required if the event's config declares a `first_name` form field (e.g. `bosc_2026`) |
-| `--last_name` | `""` | Last name; required if the event's config declares a `last_name` form field (e.g. `bosc_2026`) |
+| `--first_name` | `""` | First name; required when listed in the event's `required_fields` (e.g. `ismb_bosc_2026`) |
+| `--last_name` | `""` | Last name; required when listed in the event's `required_fields` (e.g. `ismb_bosc_2026`) |
 | `--outdir` | `results` | Output directory |
 | `--ticket_number_emit_session_id` | `false` | Use session ID instead of run name |
 
