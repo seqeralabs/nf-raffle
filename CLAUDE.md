@@ -70,8 +70,15 @@ The pipeline captures workflow context to distinguish demo runs (by Seqera emplo
 |-----------|---------|-------------|
 | `--email` | (required) | Participant email |
 | `--event` | `fog_2026` | Event identifier |
+| `--affiliation` | `""` | Company/institution (organization) |
+| `--first_name` | `""` | First name; required when listed in the event's `required_fields` (e.g. `ismb_bosc_2026`) |
+| `--last_name` | `""` | Last name; required when listed in the event's `required_fields` (e.g. `ismb_bosc_2026`) |
 | `--outdir` | `results` | Output directory |
 | `--ticket_number_emit_session_id` | `false` | Use session ID instead of run name |
+
+Field requiredness is config-driven via a per-event `required_fields` array in the event config (e.g. `["first_name", "last_name", "affiliation"]`). `main.nf` errors if any listed participant-supplied field (`email`, `first_name`, `last_name`, `affiliation`) is empty. This keeps other events unaffected (e.g. `fog_2026` omits the list, so affiliation stays optional).
+
+Important: any question marked **Required** in an event's Google Form must be listed in `required_fields` (or otherwise always sent by the pipeline). Google Forms rejects the entire submission if a Required field is empty in the POST, and the failure is silent (curl still returns HTTP 200).
 
 ## Adding a New Event
 
@@ -80,5 +87,7 @@ The pipeline captures workflow context to distinguish demo runs (by Seqera emplo
    - `destination_url`: Google Form formResponse URL
    - `form_fields`: Map field names to form entry IDs:
      - `email`, `run_name`, `uuid`, `hostname`, `platform_enabled` (core fields)
+     - `affiliation` (organization), `first_name`, `last_name` (participant details)
      - `user_name`, `workspace_id`, `platform_workflow_id` (demo detection fields)
+   - `required_fields` (optional): array of participant-supplied fields to require on the CLI (e.g. `["first_name", "last_name", "affiliation"]`). Must include every field marked Required in the Google Form.
 2. Update README.md to document the new `--event` option

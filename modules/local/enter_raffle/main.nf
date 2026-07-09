@@ -8,6 +8,8 @@ process ENTER_RAFFLE {
     val next
     val email
     val affiliation
+    val first_name
+    val last_name
     val config
 
     output:
@@ -32,6 +34,8 @@ process ENTER_RAFFLE {
     if (form_fields.uuid) curl_args << "-d \"${form_fields.uuid}=\$(uuidgen)\""
     if (form_fields.platform_enabled) curl_args << "-d \"${form_fields.platform_enabled}=${platform_enabled}\""
     if (form_fields.affiliation && affiliation) curl_args << "-d \"${form_fields.affiliation}=${affiliation}\""
+    if (form_fields.first_name && first_name) curl_args << "-d \"${form_fields.first_name}=${first_name}\""
+    if (form_fields.last_name && last_name) curl_args << "-d \"${form_fields.last_name}=${last_name}\""
     if (form_fields.user_name) curl_args << "-d \"${form_fields.user_name}=${user_name}\""
     if (form_fields.workspace_id) curl_args << "-d \"${form_fields.workspace_id}=${workspace_id}\""
     if (form_fields.platform_workflow_id) curl_args << "-d \"${form_fields.platform_workflow_id}=${platform_workflow_id}\""

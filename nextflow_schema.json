@@ -24,15 +24,26 @@
                 },
                 "affiliation": {
                     "type": "string",
-                    "description": "Your company or institution name.",
+                    "description": "Your company or institution name (organization).",
                     "fa_icon": "fas fa-building"
+                },
+                "first_name": {
+                    "type": "string",
+                    "description": "Your first name. Required for events that request it (e.g. ISMB/BOSC 2026).",
+                    "fa_icon": "fas fa-user"
+                },
+                "last_name": {
+                    "type": "string",
+                    "description": "Your last name. Required for events that request it (e.g. ISMB/BOSC 2026).",
+                    "fa_icon": "fas fa-user"
                 },
                 "event": {
                     "type": "string",
                     "default": "fog_2026",
                     "description": "Which event are you attending?",
                     "enum": [
-                        "fog_2026"
+                        "fog_2026",
+                        "ismb_bosc_2026"
                     ],
                     "fa_icon": "fas fa-ticket-alt"
                 },

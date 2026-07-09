@@ -1,0 +1,16 @@
+{
+  "event_name": "ISMB/BOSC 2026",
+  "help": "Enter the raffle for ISMB/BOSC 2026 conference. Requires your first name, last name, email, and organization to participate.",
+  "winner_announcement": "3pm EST on July 16th, 2026",
+  "destination_url": "https://docs.google.com/forms/d/e/1FAIpQLSeuIaryfCeNIpoFcL7pZuQXCO96Om8iw6EbVYUYU22w6TWcwg/formResponse",
+  "required_fields": ["first_name", "last_name", "affiliation"],
+  "form_fields": {
+    "first_name": "entry.2057823339",
+    "last_name": "entry.143115100",
+    "email": "entry.485923011",
+    "affiliation": "entry.347609446",
+    "run_name": "entry.1650137575",
+    "uuid": "entry.714156125",
+    "platform_enabled": "entry.1108144756"
+  }
+}

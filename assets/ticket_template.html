@@ -59,11 +59,11 @@
         }
 
         .card__face--front {
-            background-image: url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera_logo_color_darkbg.svg"), url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/ticket_background.svg");
-            background-repeat: no-repeat; /* Added to prevent repeating */
+            background-image: url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera_logo_color_reverse.svg"), url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/ticket_background.svg");
+            background-repeat: no-repeat, no-repeat;
             background-origin: content-box;
-            background-position: center;
-            background-size: contain; /* Changed from cover to contain */
+            background-position: center, center;
+            background-size: 55%, contain; /* logo centered over the same scalloped ticket as the back */
         }
 
         .card__face--back {
