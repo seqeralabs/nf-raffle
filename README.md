@@ -13,8 +13,8 @@ nf-raffle is a Nextflow pipeline designed to streamline the process of entering 
 
 Currently, the pipeline supports the following events:
 
-- FOG 2026            [`--event fog_2026`] (default)
-- ISMB/BOSC 2026      [`--event ismb_bosc_2026`] (requires `--first_name`, `--last_name`, and `--affiliation`)
+- ISMB/BOSC 2026      [`--event ismb_bosc_2026`] (default; requires `--first_name`, `--last_name`, and `--affiliation`)
+- FOG 2026            [`--event fog_2026`]
 
 ## How to Run
 
@@ -31,7 +31,7 @@ If you are already familiar with Nextflow, you can enter the raffle the followin
 
 1. Ensure you have a Seqera Platform access token set as `TOWER_ACCESS_TOKEN` in your environment.
 2. Run the Nextflow pipeline `seqeralabs/nf-raffle`
-3. (Optional) Add `--event [event_name]` to specify one of the supported events (defaults to `fog_2026` if not specified).
+3. (Optional) Add `--event [event_name]` to specify one of the supported events (defaults to `ismb_bosc_2026` if not specified).
 
 Below are detailed instructions for new users.
 
@@ -93,7 +93,7 @@ export TOWER_ACCESS_TOKEN=your_token_here
 nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT -with-tower 
 ```
 
-Add `--event [event_name]` to specify one of the supported events (defaults to `fog_2026` if not specified).
+Add `--event [event_name]` to specify one of the supported events (defaults to `ismb_bosc_2026` if not specified).
 
 Some events request additional details. **ISMB/BOSC 2026** requires your first and last name, and your organization:
 

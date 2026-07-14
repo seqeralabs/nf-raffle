@@ -35,6 +35,9 @@ jobs:
           nextflow run . \
             --email "${{ github.event.inputs.email || 'fake.name@fakeplace.com' }}" \
             ${{ github.event.inputs.event && format('--event {0}', github.event.inputs.event) || '' }} \
+            --first_name "Fake" \
+            --last_name "Name" \
+            --affiliation "Fake Place" \
             --outdir results
 
       - name: Upload results
