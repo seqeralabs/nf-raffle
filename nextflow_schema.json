@@ -39,11 +39,11 @@
                 },
                 "event": {
                     "type": "string",
-                    "default": "fog_2026",
+                    "default": "ismb_bosc_2026",
                     "description": "Which event are you attending?",
                     "enum": [
-                        "fog_2026",
-                        "ismb_bosc_2026"
+                        "ismb_bosc_2026",
+                        "fog_2026"
                     ],
                     "fa_icon": "fas fa-ticket-alt"
                 },

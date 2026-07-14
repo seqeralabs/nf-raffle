@@ -5,8 +5,8 @@ include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/ma
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
 workflow {
-    // Default event to FOG 2026 if not specified
-    def event = params.event ?: 'fog_2026'
+    // Default event to ISMB/BOSC 2026 if not specified
+    def event = params.event ?: 'ismb_bosc_2026'
 
     // Validate required parameters
     if (!params.email) {
