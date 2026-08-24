@@ -13,6 +13,7 @@ nf-raffle is a Nextflow pipeline designed to streamline the process of entering 
 
 Currently, the pipeline supports the following events:
 
+- ECCB 2026           [`--event eccb_2026`]
 - ISMB/BOSC 2026      [`--event ismb_bosc_2026`] (default; requires `--first_name`, `--last_name`, and `--affiliation`)
 - FOG 2026            [`--event fog_2026`]
 
@@ -20,10 +21,10 @@ Currently, the pipeline supports the following events:
 
 There are two ways to run the raffle:
 
-* From Seqera Platform at the booth. Come talk to us! 
+* From Seqera Platform at the booth. Come talk to us!
 * From the Nextflow command line on your laptop (see below)
 
-### Overview 
+### Overview
 
 The nf-raffle pipeline guides you through an interactive raffle entry process where you'll provide your contact information and be entered into the event raffle. The pipeline uses Nextflow and integrates with Seqera Platform for enhanced functionality.
 
@@ -31,7 +32,7 @@ If you are already familiar with Nextflow, you can enter the raffle the followin
 
 1. Ensure you have a Seqera Platform access token set as `TOWER_ACCESS_TOKEN` in your environment.
 2. Run the Nextflow pipeline `seqeralabs/nf-raffle`
-3. (Optional) Add `--event [event_name]` to specify one of the supported events (defaults to `ismb_bosc_2026` if not specified).
+3. (Optional) Add `--event [event_name]` to specify one of the supported events (defaults to `eccb_2026` if not specified).
 
 Below are detailed instructions for new users.
 
@@ -57,7 +58,7 @@ nextflow -version
 You should see something like this:
 
 ```console
->  nextflow -version                                                      
+>  nextflow -version
 
       N E X T F L O W
       version 25.04.6 build 5954
@@ -90,14 +91,14 @@ export TOWER_ACCESS_TOKEN=your_token_here
 ### Step 5: Run the Pipeline
 
 ```bash
-nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT -with-tower 
+nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT -with-tower
 ```
 
-Add `--event [event_name]` to specify one of the supported events (defaults to `ismb_bosc_2026` if not specified).
+Add `--event [event_name]` to specify one of the supported events (defaults to `eccb_2026` if not specified).
 
-Some events request additional details. **ISMB/BOSC 2026** requires your first and last name, and your organization:
+Some events request additional details. **ECCB 2026** requires your first and last name, and your organization:
 
 ```bash
-nextflow run seqeralabs/nf-raffle --email EMAIL --event ismb_bosc_2026 \
+nextflow run seqeralabs/nf-raffle --email EMAIL --event eccb_2026 \
   --first_name FIRST --last_name LAST --affiliation ORGANIZATION -with-tower
 ```

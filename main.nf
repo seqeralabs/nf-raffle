@@ -5,8 +5,8 @@ include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/ma
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
 workflow {
-    // Default event to ISMB/BOSC 2026 if not specified
-    def event = params.event ?: 'ismb_bosc_2026'
+    // Default event to ECCB 2026 if not specified
+    def event = params.event ?: 'eccb_2026'
 
     // Validate required parameters
     if (!params.email) {
@@ -71,7 +71,7 @@ workflow {
             Simply enable Seqera Platform monitoring by:
 
             1. Create an account on https://cloud.seqera.io/
-            
+
             2. Create an access token at https://cloud.seqera.io/tokens
 
             3. Adding to your nextflow.config:

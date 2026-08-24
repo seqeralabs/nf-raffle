@@ -1,0 +1,20 @@
+{
+    "event_name": "ECCB 2026",
+    "help": "Enter the raffle for ECCB 2026 conference. Requires your first name, last name, email, and organization to participate.",
+    "winner_announcement": "1pm CEST on September 2nd, 2026",
+    "destination_url": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScyRTlUU6GXtkv7surOr3jKHTNkU-9kQYr-d4v1LGJXpRN45Q/formResponse",
+    "required_fields": [
+        "first_name",
+        "last_name",
+        "affiliation"
+    ],
+    "form_fields": {
+        "first_name": "entry.462741331",
+        "last_name": "entry.57900696",
+        "email": "entry.1482654313",
+        "affiliation": "entry.620353698",
+        "run_name": "entry.962477295",
+        "uuid": "entry.376766066",
+        "platform_enabled": "entry.2107699306"
+    }
+}

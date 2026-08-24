@@ -29,19 +29,20 @@
                 },
                 "first_name": {
                     "type": "string",
-                    "description": "Your first name. Required for events that request it (e.g. ISMB/BOSC 2026).",
+                    "description": "Your first name. Required for events that request it (e.g. ECCB 2026).",
                     "fa_icon": "fas fa-user"
                 },
                 "last_name": {
                     "type": "string",
-                    "description": "Your last name. Required for events that request it (e.g. ISMB/BOSC 2026).",
+                    "description": "Your last name. Required for events that request it (e.g. ECCB 2026).",
                     "fa_icon": "fas fa-user"
                 },
                 "event": {
                     "type": "string",
-                    "default": "ismb_bosc_2026",
+                    "default": "eccb_2026",
                     "description": "Which event are you attending?",
                     "enum": [
+                        "eccb_2026",
                         "ismb_bosc_2026",
                         "fog_2026"
                     ],
