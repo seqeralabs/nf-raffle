@@ -1,70 +1,63 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com///nextflow_schema.json",
-    "title": " pipeline parameters",
-    "description": "",
-    "type": "object",
-    "$defs": {
-        "input_output_options": {
-            "title": "Input/output options",
-            "type": "object",
-            "fa_icon": "fas fa-terminal",
-            "description": "Define where the pipeline should find input data and save output data.",
-            "required": [
-                "email",
-                "event"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "description": "Enter your email address here.",
-                    "fa_icon": "fas fa-envelope",
-                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
-                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-                },
-                "affiliation": {
-                    "type": "string",
-                    "description": "Your company or institution name (organization).",
-                    "fa_icon": "fas fa-building"
-                },
-                "first_name": {
-                    "type": "string",
-                    "description": "Your first name. Required for events that request it (e.g. ECCB 2026).",
-                    "fa_icon": "fas fa-user"
-                },
-                "last_name": {
-                    "type": "string",
-                    "description": "Your last name. Required for events that request it (e.g. ECCB 2026).",
-                    "fa_icon": "fas fa-user"
-                },
-                "event": {
-                    "type": "string",
-                    "default": "eccb_2026",
-                    "description": "Which event are you attending?",
-                    "enum": [
-                        "eccb_2026",
-                        "ismb_bosc_2026",
-                        "fog_2026"
-                    ],
-                    "fa_icon": "fas fa-ticket-alt"
-                },
-                "outdir": {
-                    "type": "string",
-                    "format": "directory-path",
-                    "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open",
-                    "default": "results"
-                },
-                "ticket_number_emit_session_id": {
-                    "type": "boolean",
-                    "hidden": true
-                }
-            }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com///nextflow_schema.json",
+  "title": " pipeline parameters",
+  "description": "",
+  "type": "object",
+  "$defs": {
+    "input_output_options": {
+      "title": "Input/output options",
+      "type": "object",
+      "fa_icon": "fas fa-terminal",
+      "description": "Define where the pipeline should find input data and save output data.",
+      "required": ["email", "event", "first_name", "last_name", "affiliation"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Enter your email address here.",
+          "fa_icon": "fas fa-envelope",
+          "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
+          "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+        },
+        "affiliation": {
+          "type": "string",
+          "description": "Your company or institution name (organization).",
+          "fa_icon": "fas fa-building"
+        },
+        "first_name": {
+          "type": "string",
+          "description": "Your first name. Required for events that request it (e.g. ECCB 2026).",
+          "fa_icon": "fas fa-user"
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Your last name. Required for events that request it (e.g. ECCB 2026).",
+          "fa_icon": "fas fa-user"
+        },
+        "event": {
+          "type": "string",
+          "default": "eccb_2026",
+          "description": "Which event are you attending?",
+          "enum": ["eccb_2026", "ismb_bosc_2026", "fog_2026"],
+          "fa_icon": "fas fa-ticket-alt"
+        },
+        "outdir": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+          "fa_icon": "fas fa-folder-open",
+          "default": "results"
+        },
+        "ticket_number_emit_session_id": {
+          "type": "boolean",
+          "hidden": true
         }
-    },
-    "allOf": [
-        {
-            "$ref": "#/$defs/input_output_options"
-        }
-    ]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/input_output_options"
+    }
+  ]
 }
