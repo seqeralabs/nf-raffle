@@ -13,6 +13,7 @@ nf-raffle is a Nextflow pipeline designed to streamline the process of entering 
 
 Currently, the pipeline supports the following events:
 
+- BioTechX Basel 2026 [`--event biotechx_basel_2026`] (requires `--first_name`, `--last_name`, and `--affiliation`)
 - ECCB 2026           [`--event eccb_2026`]
 - ISMB/BOSC 2026      [`--event ismb_bosc_2026`] (default; requires `--first_name`, `--last_name`, and `--affiliation`)
 - FOG 2026            [`--event fog_2026`]
