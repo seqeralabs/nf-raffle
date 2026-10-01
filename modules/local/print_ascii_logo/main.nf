@@ -1,3 +1,5 @@
+nextflow.enable.types = true
+
 process PRINT_ASCII_LOGO {
     tag "${logo}"
     label 'process_single'
@@ -5,11 +7,11 @@ process PRINT_ASCII_LOGO {
     conda "${moduleDir}/environment.yml"
 
     input:
-    path logo
-    val next
+    logo: Path
+    next: Boolean
 
     output:
-    val true
+    true
 
     script:
     """

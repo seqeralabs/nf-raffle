@@ -4,19 +4,37 @@ include { ENTER_RAFFLE          } from './modules/local/enter_raffle/main'
 include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/main'
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
-workflow {
-    // Default event to ECCB 2026 if not specified
-    def event = params.event ?: 'eccb_2026'
+params {
+    help: Boolean = false
+    event: String = 'eccb_2026'
+    email: String = ''
+    affiliation: String = ''
+    first_name: String = ''
+    last_name: String = ''
+    outdir: String = 'results'
+    ticket_number_emit_session_id: Boolean = false
+}
 
+workflow {
+    main:
     // Validate required parameters
     if (!params.email) {
         error("Please provide --email parameter")
     }
 
-    // Load event configuration
-    def config_file = file("${projectDir}/event_configs/${event}.json", checkIfExists: true)
-
-    def config = new groovy.json.JsonSlurper().parse(config_file)
+    // Load event configuration and model it as a typed record (EventConfig).
+    // The record is duck-typed against the EventConfig record type required by
+    // the downstream processes.
+    def config_file = file("${projectDir}/event_configs/${params.event}.json", checkIfExists: true)
+    def parsed = new groovy.json.JsonSlurper().parse(config_file)
+    def config = record(
+        event_name         : parsed.event_name,
+        help               : parsed.help,
+        destination_url    : parsed.destination_url,
+        form_fields        : parsed.form_fields,
+        required_fields    : parsed.required_fields,
+        winner_announcement: parsed.winner_announcement,
+    )
 
     // Validate participant-supplied fields this event marks as required. The
     // required_fields list is per-event, so other events are unaffected
@@ -31,72 +49,103 @@ workflow {
     ]
     config.required_fields?.each { fld ->
         if (required_field_params.containsKey(fld) && !required_field_params[fld]) {
-            error("This event (${event}) requires --${fld}")
+            error("This event (${params.event}) requires --${fld}")
         }
     }
 
-    // Print privacy policy information
-    PRINT_PRIVACY_MESSAGE(config)
+    // Print privacy policy information. Its output channel emits once the
+    // notice has been shown; we thread the raffle entry through it below so
+    // the ordering ("enter only after the privacy notice") lives in workflow
+    // logic rather than in a dummy `next` process input.
+    def ch_ready = PRINT_PRIVACY_MESSAGE(config)
 
-    // Standard raffle entry for all events
-    ENTER_RAFFLE(
-        PRINT_PRIVACY_MESSAGE.out,
-        params.email,
-        params.affiliation,
-        params.first_name,
-        params.last_name,
-        config
+    // Determine whether Seqera Platform monitoring is enabled. The full
+    // workflow metadata (including .session) is available here in the entry
+    // workflow body, so we read it once and pass it to ENTER_RAFFLE as a
+    // plain value input. This keeps the process free of the workflow.session
+    // accessor, which the typed `workflow` namespace does not expose inside a
+    // process under nextflow.enable.types.
+    def platform_enabled = workflow.session.config.navigate('tower.enabled') ?: false
+
+    // Group the participant-supplied fields into a Participant record so
+    // ENTER_RAFFLE receives one typed value instead of four loose strings.
+    // Duck-typed against the Participant record type, like `config` above.
+    def participant = record(
+        email      : params.email,
+        first_name : params.first_name,
+        last_name  : params.last_name,
+        affiliation: params.affiliation,
     )
 
-    // Generate ticket
-    html_report_template = Channel.fromPath("${projectDir}/assets/ticket_template.html")
-    event_name = config.event_name
-    ticket_number = params.ticket_number_emit_session_id ? ENTER_RAFFLE.out.session_id : ENTER_RAFFLE.out.run_name
+    // Gate the participant on the privacy notice completing, then submit the
+    // raffle entry. ch_entry emits a single RaffleEntry record.
+    def ch_participant = ch_ready.map { _ready -> participant }
+    def ch_entry = ENTER_RAFFLE(
+        ch_participant,
+        config,
+        platform_enabled
+    )
 
-    winner_announcement = config.winner_announcement ?: ""
+    // Generate ticket - split the RaffleEntry record down to the ticket number
+    def html_report_template = channel.fromPath("${projectDir}/assets/ticket_template.html")
+    def event_name = config.event_name
+    def ticket_number = params.ticket_number_emit_session_id
+        ? ch_entry.map { entry -> entry.session_id }
+        : ch_entry.map { entry -> entry.run_name }
+    def winner_announcement = config.winner_announcement ?: ""
+
     PUBLISH_REPORT(html_report_template, event_name, ticket_number, winner_announcement)
 
-    workflow.onComplete = {
-        // Check if Tower/Platform is disabled or access token is missing
-        def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
-        def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+    publish:
+    raffle_ticket = PUBLISH_REPORT.out
 
-        if (!towerEnabled || !towerToken) {
-            log.warn """
-            =====================================
-            💡 Win more entries to the raffle! 💡
-            =====================================
+    onComplete:
+    // Check if Tower/Platform is disabled or access token is missing
+    def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
+    def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
 
-            Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
-            Simply enable Seqera Platform monitoring by:
+    if (!towerEnabled || !towerToken) {
+        log.warn """
+        =====================================
+        💡 Win more entries to the raffle! 💡
+        =====================================
 
-            1. Create an account on https://cloud.seqera.io/
+        Create a free account on https://cloud.seqera.io/ to get additional raffle entries!
+        Simply enable Seqera Platform monitoring by:
 
-            2. Create an access token at https://cloud.seqera.io/tokens
+        1. Create an account on https://cloud.seqera.io/
 
-            3. Adding to your nextflow.config:
-            tower {
-                enabled     = true
-                accessToken = 'your-token-here'
-            }
+        2. Create an access token at https://cloud.seqera.io/tokens
 
-            4. Run the pipeline with the additional configuration:
-            nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
-
-            =====================================
-            """.stripIndent()
-        } else {
-            log.info """
-            ============================================\n
-            🎉 You earned extra raffle tickets! 🎉
-            ============================================
-
-            Because you used Seqera Platform for this workflow,
-            you have received additional entries to the raffle.
-
-            Thank you for using Seqera Platform and good luck!
-            ============================================
-            """.stripIndent()
+        3. Adding to your nextflow.config:
+        tower {
+            enabled     = true
+            accessToken = 'your-token-here'
         }
+
+        4. Run the pipeline with the additional configuration:
+        nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
+
+        =====================================
+        """.stripIndent()
+    } else {
+        log.info """
+        ============================================\n
+        🎉 You earned extra raffle tickets! 🎉
+        ============================================
+
+        Because you used Seqera Platform for this workflow,
+        you have received additional entries to the raffle.
+
+        Thank you for using Seqera Platform and good luck!
+        ============================================
+        """.stripIndent()
+    }
+}
+
+output {
+    raffle_ticket {
+        path '.'
+        mode 'copy'
     }
 }

@@ -1,17 +1,18 @@
+nextflow.enable.types = true
+
 process PUBLISH_REPORT {
     tag "${event}: ${ticket_number}"
-    publishDir "${params.outdir}", mode: 'copy'
     container 'community.wave.seqera.io/library/sed_coreutils_procps-ng:749edc0a4a6c3ef9'
     conda "${moduleDir}/environment.yml"
 
     input:
-    path html_report
-    val event
-    val ticket_number
-    val winner_announcement
+    html_report: Path
+    event: String
+    ticket_number: String
+    winner_announcement: String
 
     output:
-    path "raffle_ticket.html"
+    file('raffle_ticket.html')
 
     script:
     def winner_text = winner_announcement ? "Winner announced ${winner_announcement}" : ""
