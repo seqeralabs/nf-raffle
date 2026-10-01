@@ -1,3 +1,5 @@
+nextflow.enable.types = true
+
 process CONGRATULATIONS {
     tag "${congrats}"
     label 'process_single'
@@ -5,8 +7,8 @@ process CONGRATULATIONS {
     conda "${moduleDir}/environment.yml"
 
     input:
-    path congrats
-    val next
+    congrats: Path
+    next: Boolean
 
     script:
     """
