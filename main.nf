@@ -22,9 +22,6 @@ workflow {
         error("Please provide --email parameter")
     }
 
-    // Load event configuration and model it as a typed record (EventConfig).
-    // The record is duck-typed against the EventConfig record type required by
-    // the downstream processes.
     def config_file = file("${projectDir}/event_configs/${params.event}.json", checkIfExists: true)
     def parsed = new groovy.json.JsonSlurper().parse(config_file)
     def config = record(
@@ -53,23 +50,11 @@ workflow {
         }
     }
 
-    // Print privacy policy information. Its output channel emits once the
-    // notice has been shown; we thread the raffle entry through it below so
-    // the ordering ("enter only after the privacy notice") lives in workflow
-    // logic rather than in a dummy `next` process input.
     def ch_ready = PRINT_PRIVACY_MESSAGE(config)
 
-    // Determine whether Seqera Platform monitoring is enabled. The full
-    // workflow metadata (including .session) is available here in the entry
-    // workflow body, so we read it once and pass it to ENTER_RAFFLE as a
-    // plain value input. This keeps the process free of the workflow.session
-    // accessor, which the typed `workflow` namespace does not expose inside a
-    // process under nextflow.enable.types.
+    // Read platform_enabled here (workflow.session.config is unavailable inside typed processes)
     def platform_enabled = workflow.session.config.navigate('tower.enabled') ?: false
 
-    // Group the participant-supplied fields into a Participant record so
-    // ENTER_RAFFLE receives one typed value instead of four loose strings.
-    // Duck-typed against the Participant record type, like `config` above.
     def participant = record(
         email      : params.email,
         first_name : params.first_name,
@@ -77,8 +62,6 @@ workflow {
         affiliation: params.affiliation,
     )
 
-    // Gate the participant on the privacy notice completing, then submit the
-    // raffle entry. ch_entry emits a single RaffleEntry record.
     def ch_participant = ch_ready.map { _ready -> participant }
     def ch_entry = ENTER_RAFFLE(
         ch_participant,
@@ -86,7 +69,6 @@ workflow {
         platform_enabled
     )
 
-    // Generate ticket - split the RaffleEntry record down to the ticket number
     def html_report_template = channel.fromPath("${projectDir}/assets/ticket_template.html")
     def event_name = config.event_name
     def ticket_number = params.ticket_number_emit_session_id
@@ -100,7 +82,6 @@ workflow {
     raffle_ticket = PUBLISH_REPORT.out
 
     onComplete:
-    // Check if Tower/Platform is disabled or access token is missing
     def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
     def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
 

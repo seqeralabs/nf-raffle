@@ -1,11 +1,5 @@
-// NOTE: `platform_enabled` (whether Seqera Platform monitoring is on) is
-// computed in the entry workflow body and passed in as a plain input. This
-// avoids reading `workflow.session.config.navigate(...)` inside the process,
-// which the typed `workflow` namespace does not expose under
-// `nextflow.enable.types`. Participant details arrive as a `Participant`
-// record and the event configuration as an `EventConfig` record. The run
-// identifiers are returned as a single record, which the entry workflow splits
-// into the ticket number.
+// This process stays untyped for output (workflow.sessionId/runName are unavailable
+// in typed processes). The onComplete block in main.nf also uses workflow.session.config.
 nextflow.enable.types = true
 
 include { EventConfig ; Participant } from '../../../types'
@@ -40,10 +34,7 @@ process ENTER_RAFFLE {
     def workspace_id = System.getenv('TOWER_WORKSPACE_ID') ?: ''
     def platform_workflow_id = System.getenv('TOWER_WORKFLOW_ID') ?: ''
 
-    // Build curl data arguments - each entry is emitted only when its form
-    // field (and, where relevant, its value) is present, then the empty
-    // slots are filtered out. Built as an immutable list because the strict
-    // type checker does not permit in-place list mutation (<<, add).
+    // Built as immutable list (typed processes don't allow << or add)
     def curl_args = [
         form_fields.email ? "-d \"${form_fields.email}=${email}\"" : '',
         form_fields.run_name ? "-d \"${form_fields.run_name}=${workflow.runName}\"" : '',

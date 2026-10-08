@@ -1,8 +1,6 @@
 nextflow.enable.types = true
 
-// Shared record type describing an event configuration loaded from
-// event_configs/<event>.json. Optional fields (present in only some events)
-// are declared nullable so every event config duck-types to EventConfig.
+// Optional fields are nullable so every event config duck-types to EventConfig.
 record EventConfig {
     event_name: String
     help: String
@@ -12,10 +10,7 @@ record EventConfig {
     winner_announcement: String?
 }
 
-// Participant-supplied raffle entry details. Only `email` is always required;
-// the name/affiliation fields are optional here because each event decides
-// which of them are mandatory via EventConfig.required_fields (validated in
-// the entry workflow). Unset fields arrive as empty strings from params.
+// Fields are optional here; EventConfig.required_fields determines which are mandatory per-event.
 record Participant {
     email: String
     first_name: String?
