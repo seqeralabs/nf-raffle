@@ -1,0 +1,19 @@
+{
+  "event_name": "ASHG 2026",
+  "help": "Enter the raffle for ASHG 2026. Requires your first name, last name, email, and affiliation to participate.",
+  "destination_url": "https://docs.google.com/forms/d/e/1FAIpQLSfsohhT-dMxA9TiAnqXGHzfAzivP0_oeKVkWQp4DXeS5e6ZDA/formResponse",
+  "required_fields": [
+    "first_name",
+    "last_name",
+    "affiliation"
+  ],
+  "form_fields": {
+    "first_name": "entry.34786398",
+    "last_name": "entry.934407306",
+    "affiliation": "entry.944805918",
+    "email": "entry.1829806584",
+    "run_name": "entry.55593741",
+    "uuid": "entry.1298715334",
+    "platform_enabled": "entry.2075010812"
+  }
+}

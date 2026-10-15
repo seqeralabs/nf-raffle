@@ -17,6 +17,7 @@ Currently, the pipeline supports the following events:
 - ECCB 2026           [`--event eccb_2026`]
 - ISMB/BOSC 2026      [`--event ismb_bosc_2026`] (default; requires `--first_name`, `--last_name`, and `--affiliation`)
 - FOG 2026            [`--event fog_2026`]
+- ASHG 2026           [`--event ashg_2026`] (requires `--first_name`, `--last_name`, and `--affiliation`)
 
 ## How to Run
 
