@@ -51,6 +51,6 @@ process ENTER_RAFFLE {
     def curl_data = curl_args.findAll { arg -> arg != '' }.join(' ')
 
     """
-    curl -X POST ${curl_data} "${destination}"
+    curl --fail-with-body -sS -w '\\nHTTP status: %{http_code}\\n' -X POST ${curl_data} "${destination}"
     """
 }
