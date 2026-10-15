@@ -1,23 +1,31 @@
+// This process stays untyped for output (workflow.sessionId/runName are unavailable
+// in typed processes). The onComplete block in main.nf also uses workflow.session.config.
+nextflow.enable.types = true
+
+include { EventConfig ; Participant } from '../../../types'
+
 process ENTER_RAFFLE {
-    tag "${email}"
+    tag "${participant.email}"
     label 'process_single'
     container 'community.wave.seqera.io/library/curl_util-linux_procps-ng:72cd763bb8c83eca'
     conda "${moduleDir}/environment.yml"
 
     input:
-    val next
-    val email
-    val affiliation
-    val first_name
-    val last_name
-    val config
+    participant: Participant
+    config: EventConfig
+    platform_enabled: Boolean
 
     output:
-    val workflow.sessionId, emit: session_id
-    val workflow.runName, emit: run_name
+    record(
+        session_id: workflow.sessionId.toString(),
+        run_name: workflow.runName,
+    )
 
     script:
-    def platform_enabled = workflow.session.config.navigate('tower.enabled') ?: false
+    def email = participant.email
+    def affiliation = participant.affiliation
+    def first_name = participant.first_name
+    def last_name = participant.last_name
     def destination = config.destination_url
     def form_fields = config.form_fields
 
@@ -26,20 +34,21 @@ process ENTER_RAFFLE {
     def workspace_id = System.getenv('TOWER_WORKSPACE_ID') ?: ''
     def platform_workflow_id = System.getenv('TOWER_WORKFLOW_ID') ?: ''
 
-    // Build curl data arguments - collect non-empty args into a list
-    def curl_args = []
-    if (form_fields.email) curl_args << "-d \"${form_fields.email}=${email}\""
-    if (form_fields.run_name) curl_args << "-d \"${form_fields.run_name}=${workflow.runName}\""
-    if (form_fields.hostname) curl_args << "-d \"${form_fields.hostname}=\$(hostname)\""
-    if (form_fields.uuid) curl_args << "-d \"${form_fields.uuid}=\$(uuidgen)\""
-    if (form_fields.platform_enabled) curl_args << "-d \"${form_fields.platform_enabled}=${platform_enabled}\""
-    if (form_fields.affiliation && affiliation) curl_args << "-d \"${form_fields.affiliation}=${affiliation}\""
-    if (form_fields.first_name && first_name) curl_args << "-d \"${form_fields.first_name}=${first_name}\""
-    if (form_fields.last_name && last_name) curl_args << "-d \"${form_fields.last_name}=${last_name}\""
-    if (form_fields.user_name) curl_args << "-d \"${form_fields.user_name}=${user_name}\""
-    if (form_fields.workspace_id) curl_args << "-d \"${form_fields.workspace_id}=${workspace_id}\""
-    if (form_fields.platform_workflow_id) curl_args << "-d \"${form_fields.platform_workflow_id}=${platform_workflow_id}\""
-    def curl_data = curl_args.join(' ')
+    // Built as immutable list (typed processes don't allow << or add)
+    def curl_args = [
+        form_fields.email ? "-d \"${form_fields.email}=${email}\"" : '',
+        form_fields.run_name ? "-d \"${form_fields.run_name}=${workflow.runName}\"" : '',
+        form_fields.hostname ? "-d \"${form_fields.hostname}=\$(hostname)\"" : '',
+        form_fields.uuid ? "-d \"${form_fields.uuid}=\$(uuidgen)\"" : '',
+        form_fields.platform_enabled ? "-d \"${form_fields.platform_enabled}=${platform_enabled}\"" : '',
+        form_fields.affiliation && affiliation ? "-d \"${form_fields.affiliation}=${affiliation}\"" : '',
+        form_fields.first_name && first_name ? "-d \"${form_fields.first_name}=${first_name}\"" : '',
+        form_fields.last_name && last_name ? "-d \"${form_fields.last_name}=${last_name}\"" : '',
+        form_fields.user_name ? "-d \"${form_fields.user_name}=${user_name}\"" : '',
+        form_fields.workspace_id ? "-d \"${form_fields.workspace_id}=${workspace_id}\"" : '',
+        form_fields.platform_workflow_id ? "-d \"${form_fields.platform_workflow_id}=${platform_workflow_id}\"" : '',
+    ]
+    def curl_data = curl_args.findAll { arg -> arg != '' }.join(' ')
 
     """
     curl -X POST ${curl_data} "${destination}"

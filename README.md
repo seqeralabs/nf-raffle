@@ -39,7 +39,7 @@ Below are detailed instructions for new users.
 
 ### Step 1: Install Nextflow
 
-First, ensure you have Java 11 or later installed, then install Nextflow:
+This pipeline requires Nextflow 26.04.0 or later. First, ensure you have Java 17 or later installed, then install Nextflow:
 
 ```bash
 # Install Nextflow
@@ -56,17 +56,7 @@ Verify the installation:
 nextflow -version
 ```
 
-You should see something like this:
-
-```console
->  nextflow -version
-
-      N E X T F L O W
-      version 25.04.6 build 5954
-      created 01-07-2025 11:27 UTC (12:27 BST)
-      cite doi:10.1038/nbt.3820
-      http://nextflow.io
-```
+Check that the reported version is 26.04.0 or later. Older versions stop with a version error before the pipeline starts.
 
 ### Step 2: Create a Seqera Platform Account
 
