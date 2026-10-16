@@ -1,43 +1,44 @@
 #!/usr/bin/env nextflow
 
+nextflow.enable.types = true
+
+include { paramsHelp ; validateParameters } from 'plugin/nf-schema'
+include { loadEventConfig ; towerConfig } from './utils'
 include { ENTER_RAFFLE          } from './modules/local/enter_raffle/main'
 include { PRINT_PRIVACY_MESSAGE } from './modules/local/print_privacy_message/main'
 include { PUBLISH_REPORT        } from './modules/local/publish_report/main'
 
 params {
     help: Boolean = false
-    event: String = 'eccb_2026'
+    event: String = 'ashg_2026'
     email: String = ''
     affiliation: String = ''
     first_name: String = ''
     last_name: String = ''
     outdir: String = 'results'
     ticket_number_emit_session_id: Boolean = false
+    // Test-only: path to an event config that replaces event_configs/<event>.json (see the `test` profile).
+    event_config: String = ''
 }
 
 workflow {
     main:
-    // Validate required parameters
+    if (params.help) {
+        log.info(paramsHelp())
+        exit(0, null)
+    }
+
+    validateParameters()
+
     if (!params.email) {
         error("Please provide --email parameter")
     }
 
-    def config_file = file("${projectDir}/event_configs/${params.event}.json", checkIfExists: true)
-    def parsed = new groovy.json.JsonSlurper().parse(config_file)
-    def config = record(
-        event_name         : parsed.event_name,
-        help               : parsed.help,
-        destination_url    : parsed.destination_url,
-        form_fields        : parsed.form_fields,
-        required_fields    : parsed.required_fields,
-        winner_announcement: parsed.winner_announcement,
-    )
+    def config = loadEventConfig(params.event_config ?: "${projectDir}/event_configs/${params.event}.json")
 
-    // Validate participant-supplied fields this event marks as required. The
-    // required_fields list is per-event, so other events are unaffected
-    // (e.g. fog_2026 keeps affiliation optional). Any field marked Required in
-    // the event's Google Form must be listed here so the pipeline always sends
-    // a value and the form's required-field validation never rejects the entry.
+    // Any field marked Required in the event's Google Form must be listed in
+    // required_fields so the pipeline always sends a value: Google Forms
+    // silently drops submissions that leave a Required question empty.
     def required_field_params = [
         email      : params.email,
         first_name : params.first_name,
@@ -52,8 +53,7 @@ workflow {
 
     def ch_ready = PRINT_PRIVACY_MESSAGE(config)
 
-    // Read platform_enabled here (workflow.session.config is unavailable inside typed processes)
-    def platform_enabled = workflow.session.config.navigate('tower.enabled') ?: false
+    def platform_enabled = (towerConfig()['enabled'] ?: false) as Boolean
 
     def participant = record(
         email      : params.email,
@@ -70,20 +70,19 @@ workflow {
     )
 
     def html_report_template = channel.fromPath("${projectDir}/assets/ticket_template.html")
-    def event_name = config.event_name
     def ticket_number = params.ticket_number_emit_session_id
         ? ch_entry.map { entry -> entry.session_id }
         : ch_entry.map { entry -> entry.run_name }
-    def winner_announcement = config.winner_announcement ?: ""
 
-    PUBLISH_REPORT(html_report_template, event_name, ticket_number, winner_announcement)
+    def ch_ticket = PUBLISH_REPORT(html_report_template, config.event_name, ticket_number, config.winner_announcement ?: "")
 
     publish:
-    raffle_ticket = PUBLISH_REPORT.out
+    raffle_ticket = ch_ticket
 
     onComplete:
-    def towerEnabled = workflow.session.config.navigate('tower.enabled') ?: false
-    def towerToken = workflow.session.config.navigate('tower.accessToken') ?: System.getenv('TOWER_ACCESS_TOKEN')
+    def tower = towerConfig()
+    def towerEnabled = tower['enabled'] as Boolean
+    def towerToken = (tower['accessToken'] ?: env('TOWER_ACCESS_TOKEN')) as String
 
     if (!towerEnabled || !towerToken) {
         log.warn """
@@ -106,7 +105,6 @@ workflow {
 
         4. Run the pipeline with the additional configuration:
         nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
-
         =====================================
         """.stripIndent()
     } else {

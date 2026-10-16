@@ -1,6 +1,7 @@
 nextflow.enable.types = true
 
-// Optional fields are nullable so every event config duck-types to EventConfig.
+// Mirrors assets/schema_event_config.json, which main.nf validates each config
+// against before casting it to this record. Optional fields are nullable.
 record EventConfig {
     event_name: String
     help: String
