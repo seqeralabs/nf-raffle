@@ -10,7 +10,10 @@
       "type": "object",
       "fa_icon": "fas fa-terminal",
       "description": "Who you are and which event raffle to enter.",
-      "required": ["email", "event"],
+      "required": [
+        "email",
+        "event"
+      ],
       "properties": {
         "email": {
           "type": "string",
