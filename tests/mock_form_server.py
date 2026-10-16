@@ -15,7 +15,7 @@ import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs
 
-PLATFORM_REPLY = json.dumps({"workflowId": "mockWorkflowId", "watchUrl": "http://localhost/watch", "message": "ok"}).encode()
+PLATFORM_REPLY = json.dumps({"workflowId": "mockWorkflowId", "watchUrl": "http://localhost/watch"}).encode()
 
 
 def make_handler(log_path):

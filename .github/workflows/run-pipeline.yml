@@ -1,4 +1,4 @@
-name: Test nf-raffle Pipeline
+name: Run nf-raffle Pipeline
 
 # Runs the pipeline against a local mock form (tests/mock_form_server.py) via
 # the `test` profile. CI must never submit to a real event form.
@@ -16,7 +16,7 @@ env:
   SUBMISSION_FIELDS: entry.1001,entry.1002,entry.1003,entry.1004,entry.1005,entry.1006,entry.1007,entry.1008
 
 jobs:
-  test:
+  run-pipeline:
     runs-on: ubuntu-latest
 
     steps:

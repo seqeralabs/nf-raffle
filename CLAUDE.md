@@ -17,6 +17,9 @@ nextflow run main.nf --email user@example.com --first_name A --last_name B --aff
 # Specify event
 nextflow run main.nf --email user@example.com --event fog_2026
 
+# With Docker profile
+nextflow run main.nf --email user@example.com ... -profile docker
+
 # With Seqera Platform monitoring (gives extra raffle entries)
 nextflow run main.nf --email user@example.com ... -with-tower
 

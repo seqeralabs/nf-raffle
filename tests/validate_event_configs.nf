@@ -1,4 +1,3 @@
-#!/usr/bin/env nextflow
 // Validates every event_configs/*.json against assets/schema_event_config.json
 // and loads it as an EventConfig. Never contacts a form.
 //   nextflow run tests/validate_event_configs.nf

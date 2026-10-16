@@ -105,6 +105,7 @@ workflow {
 
         4. Run the pipeline with the additional configuration:
         nextflow run seqeralabs/nf-raffle --email <your email> -c nextflow.config
+
         =====================================
         """.stripIndent()
     } else {
