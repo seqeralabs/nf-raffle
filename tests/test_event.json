@@ -1,0 +1,18 @@
+{
+  "event_name": "nf-raffle CI test",
+  "help": "Test event for CI. Posts to a local mock form, never to a real Google Form.",
+  "winner_announcement": "never (this is a test)",
+  "destination_url": "http://localhost:8765/formResponse",
+  "required_fields": ["first_name", "last_name", "affiliation"],
+  "form_fields": {
+    "email": "entry.1001",
+    "first_name": "entry.1002",
+    "last_name": "entry.1003",
+    "affiliation": "entry.1004",
+    "run_name": "entry.1005",
+    "uuid": "entry.1006",
+    "platform_enabled": "entry.1007",
+    "user_name": "entry.1008",
+    "platform_workflow_id": "entry.1009"
+  }
+}

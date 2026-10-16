@@ -286,9 +286,9 @@
         <div class="container">
             <div class="quick-start">
                 <h2>Quick Start</h2>
-                <p>Have Nextflow installed? Run this command to enter:</p>
+                <p>Have Nextflow 26.10 or later installed? Run this command to enter the current event:</p>
                 <div class="command-block">
-                    <code>nextflow run seqeralabs/nf-raffle --email YOUR_EMAIL</code>
+                    <code>nextflow run seqeralabs/nf-raffle --email YOUR_EMAIL --first_name FIRST --last_name LAST --affiliation ORGANIZATION</code>
                     <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
                 </div>
             </div>
@@ -300,7 +300,7 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h3>Install Nextflow</h3>
-                        <p>Nextflow requires Java 11 or later. Install with this command:</p>
+                        <p>The raffle needs Nextflow 26.10 or later, which requires Java 17 or later. Install with this command:</p>
                         <code>curl -s https://get.nextflow.io | bash</code>
                     </div>
                 </div>
@@ -309,8 +309,9 @@
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3>Run the Pipeline</h3>
-                        <p>Enter the raffle by running (replace with your email):</p>
-                        <code>nextflow run seqeralabs/nf-raffle --email your.email@example.com</code>
+                        <p>Enter the raffle by running (replace with your details):</p>
+                        <code>nextflow run seqeralabs/nf-raffle --email your.email@example.com --first_name FIRST --last_name LAST --affiliation ORGANIZATION</code>
+                        <p>To enter a different event, add <code>--event EVENT</code> (see the <a href="https://github.com/seqeralabs/nf-raffle#supported-events" target="_blank">list of events</a>).</p>
                     </div>
                 </div>
             </section>
@@ -341,7 +342,7 @@
                     <div class="step-content">
                         <h3>Run the Pipeline</h3>
                         <p>Your runs are now automatically monitored by Seqera Platform:</p>
-                        <code>nextflow run seqeralabs/nf-raffle --email your.email@example.com</code>
+                        <code>nextflow run seqeralabs/nf-raffle --email your.email@example.com --first_name FIRST --last_name LAST --affiliation ORGANIZATION</code>
                     </div>
                 </div>
             </section>
@@ -363,7 +364,7 @@
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3>Launch</h3>
-                        <p>Select a compute environment, enter your email in the <strong>email</strong> parameter field, and click <strong>Launch</strong>.</p>
+                        <p>Select a compute environment, fill in the <strong>email</strong>, <strong>first_name</strong>, <strong>last_name</strong> and <strong>affiliation</strong> parameters, and click <strong>Launch</strong>.</p>
                     </div>
                 </div>
 

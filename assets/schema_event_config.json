@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/schema_event_config.json",
+  "title": "nf-raffle event config",
+  "description": "Schema for event_configs/<event>.json. Generate new configs with scripts/new_event.py.",
+  "type": "object",
+  "required": [
+    "event_name",
+    "help",
+    "destination_url",
+    "form_fields"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "event_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable event name, shown on the ticket."
+    },
+    "help": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One-line description of the event and what participants must provide."
+    },
+    "winner_announcement": {
+      "type": "string",
+      "minLength": 1,
+      "description": "When the winner is announced, e.g. '3pm EDT on October 23rd, 2026'. Printed in the privacy notice and on the ticket."
+    },
+    "destination_url": {
+      "type": "string",
+      "pattern": "^https?://\\S+$",
+      "description": "Google Form formResponse URL the entry is POSTed to."
+    },
+    "required_fields": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "email",
+          "first_name",
+          "last_name",
+          "affiliation"
+        ]
+      },
+      "description": "Participant-supplied fields the pipeline requires on the command line. Must include every participant question marked Required in the Google Form."
+    },
+    "form_fields": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "description": "Maps pipeline fields to Google Form entry IDs. Fields without a mapping are not sent.",
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "$ref": "#/$defs/entry_id",
+          "description": "Participant email (--email)."
+        },
+        "first_name": {
+          "$ref": "#/$defs/entry_id",
+          "description": "Participant first name (--first_name)."
+        },
+        "last_name": {
+          "$ref": "#/$defs/entry_id",
+          "description": "Participant last name (--last_name)."
+        },
+        "affiliation": {
+          "$ref": "#/$defs/entry_id",
+          "description": "Participant company or institution (--affiliation)."
+        },
+        "run_name": {
+          "$ref": "#/$defs/entry_id",
+          "description": "Nextflow run name; also the ticket number."
+        },
+        "uuid": {
+          "$ref": "#/$defs/entry_id",
+          "description": "Random UUID generated per entry."
+        },
+        "platform_enabled": {
+          "$ref": "#/$defs/entry_id",
+          "description": "'true' when Seqera Platform monitoring (tower.enabled) is on."
+        },
+        "hostname": {
+          "$ref": "#/$defs/entry_id",
+          "description": "Hostname of the machine that ran the entry task."
+        },
+        "user_name": {
+          "$ref": "#/$defs/entry_id",
+          "description": "System user running the pipeline (workflow.userName)."
+        },
+        "workspace_id": {
+          "$ref": "#/$defs/entry_id",
+          "description": "TOWER_WORKSPACE_ID, set when monitored by or launched from Seqera Platform."
+        },
+        "platform_workflow_id": {
+          "$ref": "#/$defs/entry_id",
+          "description": "TOWER_WORKFLOW_ID, set when launched from Seqera Platform."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "entry_id": {
+      "type": "string",
+      "pattern": "^entry\\.[0-9]+$",
+      "description": "Google Form entry ID, e.g. entry.1234567890."
+    }
+  }
+}

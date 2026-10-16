@@ -6,7 +6,7 @@ Welcome to the nf-raffle pipeline! This guide will walk you through entering eve
 
 Before you begin, ensure you have:
 
-- [**Nextflow installed** (version 25.04.7 or later)](https://www.nextflow.io/docs/latest/install.html#installation)
+- [**Nextflow installed** (version 26.10.0 or later)](https://www.nextflow.io/docs/latest/install.html#installation)
 - **Internet connection** for downloading the pipeline and submitting entries
 - **Valid email address** for raffle entry
 
@@ -15,16 +15,19 @@ Before you begin, ensure you have:
 The simplest way to enter a raffle is to type this into your terminal:
 
 ```bash
-nextflow run seqeralabs/nf-raffle --email your.email@example.com
+nextflow run seqeralabs/nf-raffle --email your.email@example.com \
+  --first_name FIRST --last_name LAST --affiliation ORGANIZATION
 ```
 
-This will enter you into the default event (FOG 2026).
+This will enter you into the default event (ASHG 2026), which asks for your name and affiliation.
 
 ## Command Structure
 
 ```bash
-nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT
+nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT [--first_name FIRST --last_name LAST --affiliation ORGANIZATION]
 ```
+
+See the [list of supported events](https://github.com/seqeralabs/nf-raffle#supported-events) for `--event` values and which events require `--first_name`, `--last_name` and `--affiliation`. An unknown `--event` or invalid `--email` stops the run before anything is submitted. Run with `--help` to see all parameters.
 
 ## What Happens When You Run
 
@@ -37,7 +40,7 @@ nextflow run seqeralabs/nf-raffle --email EMAIL --event EVENT
 After successful execution, you'll find:
 
 - `results/raffle_ticket.html` - Your personalized raffle ticket
-- Various Nextflow work directories and logs
+- `work/` and `.nextflow.log` - Nextflow working files and logs, safe to delete
 
 ## Seqera Platform Integration
 

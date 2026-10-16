@@ -1,21 +1,19 @@
 name: Run nf-raffle Pipeline
 
+# Runs the pipeline against a local mock form (tests/mock_form_server.py) via
+# the `test` profile. CI must never submit to a real event form.
+
 on:
   workflow_dispatch:
-    inputs:
-      email:
-        description: "Email address for raffle entry"
-        required: true
-        default: "fake.name@fakeplace.com"
-        type: string
-      event:
-        description: "Event name"
-        required: false
-        type: string
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
+env:
+  NXF_ANSI_LOG: false
+  MOCK_LOG: ${{ github.workspace }}/mock_form_requests.jsonl
+  SUBMISSION_FIELDS: entry.1001,entry.1002,entry.1003,entry.1004,entry.1005,entry.1006,entry.1007,entry.1008
 
 jobs:
   run-pipeline:
@@ -28,24 +26,91 @@ jobs:
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@6c2e22b4d901f0c42ca66c5069f8026df026d165 # v2
         with:
-          version: "latest"
+          version: "26.10.2"
 
-      - name: Run nf-raffle pipeline
+      - name: Lint
+        run: nextflow lint .
+
+      - name: Check event list is in sync with event_configs/
+        run: python3 scripts/new_event.py sync --check
+
+      - name: Validate event configs against the schema
+        run: nextflow run tests/validate_event_configs.nf
+
+      - name: Test scripts/new_event.py against a fixture form
         run: |
-          nextflow run . \
-            --email "${{ github.event.inputs.email || 'fake.name@fakeplace.com' }}" \
-            ${{ github.event.inputs.event && format('--event {0}', github.event.inputs.event) || '' }} \
-            --first_name "Fake" \
-            --last_name "Name" \
-            --affiliation "Fake Place" \
-            --outdir results
+          url='https://docs.google.com/forms/d/e/1FAIpQLSdTESTFORMIDONLYFORCI000000000000000000000/viewform'
+          python3 scripts/new_event.py add --event zz_ci_check --name "CI check" --url "$url" \
+            --html tests/fixtures/google_form_viewform.html
+          python3 - <<'EOF'
+          import json
+          c = json.load(open("event_configs/zz_ci_check.json"))
+          assert c["required_fields"] == ["first_name", "last_name", "affiliation"], c
+          assert c["form_fields"]["affiliation"] == "entry.333", c
+          assert c["destination_url"].endswith("/formResponse"), c
+          EOF
+          python3 scripts/new_event.py sync --check
+          nextflow run tests/validate_event_configs.nf
+          rm event_configs/zz_ci_check.json
+          python3 scripts/new_event.py sync
+          git diff --exit-code
+
+      - name: Start mock form server
+        run: |
+          python3 tests/mock_form_server.py --port 8765 --log "$MOCK_LOG" &
+          for _ in $(seq 20); do curl -sf http://localhost:8765/ >/dev/null && exit 0; sleep 0.5; done
+          echo "mock form server did not start" >&2; exit 1
+
+      - name: Run pipeline (test profile)
+        run: nextflow run . -profile test --outdir results
+
+      - name: Check submission and ticket
+        run: |
+          python3 tests/assert_submission.py "$MOCK_LOG" --count 1 --fields "$SUBMISSION_FIELDS" \
+            --equals entry.1001=ci.test@example.com --equals entry.1007=false
+          run_name=$(python3 -c "import json,sys; print(json.loads(open(sys.argv[1]).readlines()[-1])['fields']['entry.1005'])" "$MOCK_LOG")
+          grep -q "nf-raffle CI test" results/raffle_ticket.html
+          grep -q "$run_name" results/raffle_ticket.html
+          echo "ticket OK for run $run_name"
+
+      - name: Run pipeline with Seqera Platform monitoring (mock endpoint)
+        env:
+          TOWER_ACCESS_TOKEN: dummy-token
+          TOWER_WORKSPACE_ID: "123"
+          TOWER_WORKFLOW_ID: ci-workflow-id
+        run: |
+          nextflow run . -profile test -with-tower http://localhost:8765 --outdir results-platform
+          # workspace_id is not mapped in tests/test_event.json, so it must not be sent.
+          python3 tests/assert_submission.py "$MOCK_LOG" --count 2 --fields "$SUBMISSION_FIELDS,entry.1009" \
+            --equals entry.1007=true --equals entry.1009=ci-workflow-id
+          test -f results-platform/raffle_ticket.html
+
+      - name: Invalid --event fails before submitting
+        run: |
+          if nextflow run . -profile test --event not_an_event --outdir results-invalid > invalid.log 2>&1; then
+            cat invalid.log; echo "expected failure" >&2; exit 1
+          fi
+          cat invalid.log
+          grep -q -- "--event (not_an_event)" invalid.log
+          python3 tests/assert_submission.py "$MOCK_LOG" --count 2
+
+      - name: Missing required field fails before submitting
+        run: |
+          if nextflow run . --event_config tests/test_event.json --email ci.test@example.com --outdir results-missing > missing.log 2>&1; then
+            cat missing.log; echo "expected failure" >&2; exit 1
+          fi
+          cat missing.log
+          grep -q -- "requires --first_name" missing.log
+          python3 tests/assert_submission.py "$MOCK_LOG" --count 2
 
       - name: Upload results
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: pipeline-results
-          path: results/
+          path: |
+            results*/
+            ${{ env.MOCK_LOG }}
           retention-days: 7
 
       - name: Upload logs
@@ -54,6 +119,8 @@ jobs:
         with:
           name: nextflow-logs
           path: |
-            .nextflow.log
+            .nextflow.log*
+            tests/.nextflow.log*
             work/
           retention-days: 7
+          include-hidden-files: true
