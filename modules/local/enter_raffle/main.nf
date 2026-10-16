@@ -1,5 +1,3 @@
-// This process stays untyped for output (workflow.sessionId/runName are unavailable
-// in typed processes). The onComplete block in main.nf also uses workflow.session.config.
 nextflow.enable.types = true
 
 include { EventConfig ; Participant } from '../../../types'
@@ -22,35 +20,35 @@ process ENTER_RAFFLE {
     )
 
     script:
-    def email = participant.email
-    def affiliation = participant.affiliation
-    def first_name = participant.first_name
-    def last_name = participant.last_name
-    def destination = config.destination_url
-    def form_fields = config.form_fields
-
-    // Capture workflow context for demo detection
-    def user_name = workflow.userName ?: ''
-    def workspace_id = System.getenv('TOWER_WORKSPACE_ID') ?: ''
-    def platform_workflow_id = System.getenv('TOWER_WORKFLOW_ID') ?: ''
-
-    // Built as immutable list (typed processes don't allow << or add)
-    def curl_args = [
-        form_fields.email ? "--data-urlencode \"${form_fields.email}=${email}\"" : '',
-        form_fields.run_name ? "--data-urlencode \"${form_fields.run_name}=${workflow.runName}\"" : '',
-        form_fields.hostname ? "--data-urlencode \"${form_fields.hostname}=\$(hostname)\"" : '',
-        form_fields.uuid ? "--data-urlencode \"${form_fields.uuid}=\$(uuidgen)\"" : '',
-        form_fields.platform_enabled ? "--data-urlencode \"${form_fields.platform_enabled}=${platform_enabled}\"" : '',
-        form_fields.affiliation && affiliation ? "--data-urlencode \"${form_fields.affiliation}=${affiliation}\"" : '',
-        form_fields.first_name && first_name ? "--data-urlencode \"${form_fields.first_name}=${first_name}\"" : '',
-        form_fields.last_name && last_name ? "--data-urlencode \"${form_fields.last_name}=${last_name}\"" : '',
-        form_fields.user_name ? "--data-urlencode \"${form_fields.user_name}=${user_name}\"" : '',
-        form_fields.workspace_id ? "--data-urlencode \"${form_fields.workspace_id}=${workspace_id}\"" : '',
-        form_fields.platform_workflow_id ? "--data-urlencode \"${form_fields.platform_workflow_id}=${platform_workflow_id}\"" : '',
+    // Values are shell-quoted, except uuid and hostname, which the task shell evaluates.
+    // Only fields that the event's form_fields maps to an entry ID are sent, and
+    // empty values are skipped, so an event can leave out any optional question
+    // (e.g. the staff-demo fields user_name, hostname, workspace_id, platform_workflow_id).
+    def values = [
+        email               : shellQuote(participant.email),
+        first_name          : shellQuote(participant.first_name),
+        last_name           : shellQuote(participant.last_name),
+        affiliation         : shellQuote(participant.affiliation),
+        run_name            : shellQuote(workflow.runName),
+        uuid                : '"$(uuidgen 2>/dev/null || cat /proc/sys/kernel/random/uuid)"',
+        platform_enabled    : shellQuote(platform_enabled.toString()),
+        hostname            : '"$(hostname)"',
+        user_name           : shellQuote(workflow.userName),
+        workspace_id        : shellQuote(env('TOWER_WORKSPACE_ID')),
+        platform_workflow_id: shellQuote(env('TOWER_WORKFLOW_ID')),
     ]
-    def curl_data = curl_args.findAll { arg -> arg != '' }.join(' ')
+    def curl_data = values.keySet()
+        .findAll { fld -> config.form_fields[fld] && values[fld] }
+        .collect { fld -> "--data-urlencode ${config.form_fields[fld]}=${values[fld]}" }
+        .join(' \\\n        ')
 
     """
-    curl --fail-with-body -sS -w '\\nHTTP status: %{http_code}\\n' -X POST ${curl_data} "${destination}"
+    curl --fail-with-body -sS -w '\\nHTTP status: %{http_code}\\n' -X POST \\
+        ${curl_data} \\
+        '${config.destination_url}'
     """
+}
+
+def shellQuote(value: String?) -> String {
+    return value ? "'" + value.replace("'", "'\\''") + "'" : ''
 }
