@@ -36,17 +36,17 @@ process ENTER_RAFFLE {
 
     // Built as immutable list (typed processes don't allow << or add)
     def curl_args = [
-        form_fields.email ? "-d \"${form_fields.email}=${email}\"" : '',
-        form_fields.run_name ? "-d \"${form_fields.run_name}=${workflow.runName}\"" : '',
-        form_fields.hostname ? "-d \"${form_fields.hostname}=\$(hostname)\"" : '',
-        form_fields.uuid ? "-d \"${form_fields.uuid}=\$(uuidgen)\"" : '',
-        form_fields.platform_enabled ? "-d \"${form_fields.platform_enabled}=${platform_enabled}\"" : '',
-        form_fields.affiliation && affiliation ? "-d \"${form_fields.affiliation}=${affiliation}\"" : '',
-        form_fields.first_name && first_name ? "-d \"${form_fields.first_name}=${first_name}\"" : '',
-        form_fields.last_name && last_name ? "-d \"${form_fields.last_name}=${last_name}\"" : '',
-        form_fields.user_name ? "-d \"${form_fields.user_name}=${user_name}\"" : '',
-        form_fields.workspace_id ? "-d \"${form_fields.workspace_id}=${workspace_id}\"" : '',
-        form_fields.platform_workflow_id ? "-d \"${form_fields.platform_workflow_id}=${platform_workflow_id}\"" : '',
+        form_fields.email ? "--data-urlencode \"${form_fields.email}=${email}\"" : '',
+        form_fields.run_name ? "--data-urlencode \"${form_fields.run_name}=${workflow.runName}\"" : '',
+        form_fields.hostname ? "--data-urlencode \"${form_fields.hostname}=\$(hostname)\"" : '',
+        form_fields.uuid ? "--data-urlencode \"${form_fields.uuid}=\$(uuidgen)\"" : '',
+        form_fields.platform_enabled ? "--data-urlencode \"${form_fields.platform_enabled}=${platform_enabled}\"" : '',
+        form_fields.affiliation && affiliation ? "--data-urlencode \"${form_fields.affiliation}=${affiliation}\"" : '',
+        form_fields.first_name && first_name ? "--data-urlencode \"${form_fields.first_name}=${first_name}\"" : '',
+        form_fields.last_name && last_name ? "--data-urlencode \"${form_fields.last_name}=${last_name}\"" : '',
+        form_fields.user_name ? "--data-urlencode \"${form_fields.user_name}=${user_name}\"" : '',
+        form_fields.workspace_id ? "--data-urlencode \"${form_fields.workspace_id}=${workspace_id}\"" : '',
+        form_fields.platform_workflow_id ? "--data-urlencode \"${form_fields.platform_workflow_id}=${platform_workflow_id}\"" : '',
     ]
     def curl_data = curl_args.findAll { arg -> arg != '' }.join(' ')
 
