@@ -12,7 +12,10 @@
       "description": "Who you are and which event raffle to enter.",
       "required": [
         "email",
-        "event"
+        "event",
+        "first_name",
+        "last_name",
+        "affiliation"
       ],
       "properties": {
         "email": {
