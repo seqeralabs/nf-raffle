@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seqera raffle ticket demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #efefef;
-            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #201637;
+            font-family: "Inter", Arial, sans-serif;
         }
 
         .container {
@@ -55,15 +59,15 @@
             backface-visibility: hidden;
             overflow: hidden;
             border-radius: 16px;
-            box-shadow: 0px 3px 18px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 3px 18px 3px rgba(32, 22, 55, 0.2);
         }
 
         .card__face--front {
-            background-image: url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera_logo_color_reverse.svg"), url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/ticket_background.svg");
+            background-image: url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera-logo-darkmode-green.svg"), url("https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/ticket_background.svg");
             background-repeat: no-repeat, no-repeat;
             background-origin: content-box;
             background-position: center, center;
-            background-size: 55%, contain; /* logo centered over the same scalloped ticket as the back */
+            background-size: 45%, contain; /* logo centered over the same scalloped ticket as the back */
         }
 
         .card__face--back {
@@ -75,6 +79,13 @@
             transform: rotateY(180deg);
         }
 
+        .ticket_icon {
+            position: absolute;
+            left: 13.6%;
+            top: 35.9%;
+            width: 13%;
+        }
+
         .card__face--front,
         .card__face--back {
             background-blend-mode: normal;
@@ -82,7 +93,7 @@
         }
 
         .ticket_text {
-            color: white;
+            color: #ffffff;
             font-size: xx-large;
             text-align: start;
             margin-left: 30%;
@@ -138,6 +149,7 @@
                 </div>
                 <div class="card__face card__face--back">
                     <!-- Back content -->
+                    <img class="ticket_icon" src="https://raw.githubusercontent.com/seqeralabs/nf-raffle/main/assets/seqera-icon-darkmode-green.svg" alt="">
                     <div class="ticket_text"><p>nf-raffle/<br>EVENT<br>TICKET_NUMBER<br><br><small>WINNER_ANNOUNCEMENT</small></p></div>
                 </div>
             </div>
