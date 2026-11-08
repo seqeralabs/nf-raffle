@@ -45,7 +45,8 @@ Required environment variable for Seqera Platform: `TOWER_ACCESS_TOKEN`
 - `utils.nf` - `loadEventConfig()` and `towerConfig()`. The typed `workflow` namespace has no accessor for the `tower` config scope, so `towerConfig()` reads it from `nextflow.Global.session.config` (this is the only internal API used). `platform_enabled` = `tower.enabled`, which `-with-tower` and `nextflow auth login` both set.
 - `event_configs/*.json` - one file per *current* event; the set of files must equal the `--event` enum. Past events live in `event_configs/archive/` and are not selectable.
 - `assets/schema_event_config.json` - JSON Schema for event configs
-- `assets/ticket_template.html` - template with EVENT, TICKET_NUMBER and WINNER_ANNOUNCEMENT placeholders
+- `assets/ticket_template.html` - template with EVENT, TICKET_NUMBER and WINNER_ANNOUNCEMENT placeholders. `sed` replaces these words anywhere in the file, so don't use them elsewhere in it.
+- `assets/seqera-*.svg` - official logos copied unmodified from https://brand.seqera.io/img/; never edit or recreate them. `docs/index.html`, the ticket template and the README use these files, colours from the brand palette (https://brand.seqera.io/color.html; Brand Green `#31C9AC` is never a text colour), and Degular/Inter/JetBrains Mono fonts.
 - `modules/local/enter_raffle` - builds the curl command from `form_fields`
 - `modules/local/print_privacy_message` - pure Groovy exec block
 - `modules/local/publish_report` - sed-based HTML template substitution

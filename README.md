@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/seqera-logo-darkmode-green.svg">
+  <img alt="Seqera" src="assets/seqera-logo-green.svg" width="220">
+</picture>
+
 # 🎟️ nf-raffle
 
 > [!TIP]
